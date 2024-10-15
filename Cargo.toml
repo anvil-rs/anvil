@@ -5,10 +5,13 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[features]
-default = []
-
 [dependencies]
-axum = { version = "0.7", optional = true}   # Replace with the actual version
+axum = { version = "0.7", features = ["macros", ] }   # Replace with the actual version
 
-actix-web = { version = "4.0", optional = true }  # Replace with the actual version
+actix-web = { version = "4.0" }  # Replace with the actual version
+tokio = { version = "1.40.0", features = [ "rt-multi-thread" ]}
+serde = { version = "1.0.210", features = ["derive"] }
+
+[dev-dependencies]
+http-body-util = "0.1.2"
+tower = "0.5.1"
