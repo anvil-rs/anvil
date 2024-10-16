@@ -2,11 +2,12 @@ use std::{future::Future, pin::Pin};
 
 use axum::{
     extract::{
-        FromRequest as AxumFromRequest, FromRequestParts as AxumFromRequestParts,
+        FromRequest as AxumFromRequest,
         Request as AxumRequest,
     },
     handler::Handler as AxumHandler,
     response::IntoResponse as AxumIntoResponse,
+    response::Response as AxumResponse,
 };
 
 use super::{Handle, Handler};
@@ -22,31 +23,19 @@ macro_rules! impl_handler {
             T::Output: AxumIntoResponse + Send ,
             T::Future: Future<Output = T::Output> + Send,
             S: Send + Sync + 'static,
-            $( $ty: AxumFromRequestParts<S> + Send + 'static + Clone,)*
-            $last: AxumFromRequest<S, M> + Send + 'static + Clone,
+            ($($ty,)* $last,): AxumFromRequest<S, M> + Send + 'static + Clone,
         {
-            type Future = Pin<Box<dyn Future<Output = axum::response::Response> + Send>>;
+            type Future = Pin<Box<dyn Future<Output = AxumResponse> + Send>>;
 
             fn call(self, req: AxumRequest, state: S) -> Self::Future {
                 Box::pin(async move {
-                    let (mut parts, body) = req.into_parts();
-                    let state = &state;
 
-                    $(
-                        let $ty = match $ty::from_request_parts(&mut parts, state).await {
-                            Ok(value) => value,
-                            Err(rejection) => return rejection.into_response(),
-                        };
-                    )*
-
-                    let req = AxumRequest::from_parts(parts, body);
-
-                    let $last = match $last::from_request(req, state).await {
+                    let args = match <($($ty,)* $last,)>::from_request(req, &state).await {
                         Ok(value) => value,
                         Err(rejection) => return rejection.into_response(),
                     };
 
-                    Handler::call(&self.0, ($($ty,)* $last,)).await.into_response()
+                    Handler::call(&self.0, args).await.into_response()
                 })
             }
         }

@@ -36,6 +36,8 @@ where
     }
 }
 
+// TODO: Implement 
+
 /// Implement the Handler trait for the Handle struct.
 /// This allows us to call the Handler trait on our Handle struct.
 /// This is useful for abstracting over different handler types.
@@ -71,19 +73,19 @@ macro_rules! factory_tuple ({ $($param:ident)* } => {
 
 // Implement the Handler trait for tuples of different lengths.
 factory_tuple! {}
-factory_tuple! { A }
-factory_tuple! { A B }
-factory_tuple! { A B C }
-factory_tuple! { A B C D }
-factory_tuple! { A B C D E }
-factory_tuple! { A B C D E F }
-factory_tuple! { A B C D E F G }
-factory_tuple! { A B C D E F G H }
-factory_tuple! { A B C D E F G H I }
-factory_tuple! { A B C D E F G H I J }
-factory_tuple! { A B C D E F G H I J K }
-factory_tuple! { A B C D E F G H I J K L }
-factory_tuple! { A B C D E F G H I J K L M }
-factory_tuple! { A B C D E F G H I J K L M N }
-factory_tuple! { A B C D E F G H I J K L M N O }
-factory_tuple! { A B C D E F G H I J K L M N O P }
+factory_tuple! { T1 }
+factory_tuple! { T1 T2 }
+factory_tuple! { T1 T2 T3 }
+factory_tuple! { T1 T2 T3 T4 }
+factory_tuple! { T1 T2 T3 T4 T5 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13 T14 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13 T14 T15 }
+factory_tuple! { T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13 T14 T15 T16 }
