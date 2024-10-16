@@ -1,3 +1,17 @@
+use std::future::Future;
+
+pub struct Request;
+pub struct Response;
+
+pub trait FromRequest: Sized {
+    type Error: Into<Response>;
+    type Future: Future<Output = Result<Self, Self::Error>>;
+
+    fn from_request(req: &Request) -> Result<Self, Self::Error>;
+}
+
+pub struct Extractor<T>(pub T);
+
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Path<T>(pub T);
 
@@ -38,4 +52,3 @@ pub struct Header<T>(pub T);
 // multiple params are there. This means that we can extract a struct with the param name. This
 // means that we can create an extractor for a model using the models name as the field that needs
 // to be extracted. Then we can create the abstraction, and
-//
