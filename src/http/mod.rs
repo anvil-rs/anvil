@@ -1,4 +1,5 @@
-pub type Request = axum::extract::Request;
+pub mod request;
 
-pub type Response = axum::response::Response;
+pub mod response;
 
+pub mod body;

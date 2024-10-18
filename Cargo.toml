@@ -11,6 +11,13 @@ axum = { version = "0.7", features = ["macros", ] }   # Replace with the actual 
 actix-web = { version = "4.0" }  # Replace with the actual version
 tokio = { version = "1.40.0", features = [ "rt-multi-thread" ]}
 serde = { version = "1.0.210", features = ["derive"] }
+http = "1.1.0"
+http-body-util = "0.1.2"
+bytes = "1.7.2"
+http-body = "1.0.1"
+futures-util = "0.3.31"
+sync_wrapper = { version = "1.0.1", features = [ "futures"] }
+pin-project-lite = "0.2.14"
 
 [dev-dependencies]
 http-body-util = "0.1.2"
