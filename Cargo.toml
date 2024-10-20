@@ -1,7 +1,15 @@
 [package]
 name = "anvil"
+keywords = [ "web", "framework", "http", "generic", "wrapper" ]
+authors = ["sjcobb"]
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/sjcobb2022/anvil"
+homepage = "https://github.com/sjcobb2022/anvil"
+description = """
+An adaptable, configurable, and generic web framework for Rust.
+"""
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -238,6 +238,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "anvil"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "axum",
+ "bytes",
+ "futures-util",
+ "http 1.1.0",
+ "http-body",
+ "http-body-util",
+ "pin-project-lite",
+ "serde",
+ "sync_wrapper 1.0.1",
+ "tokio",
+ "tower 0.5.1",
+]
+
+[[package]]
 name = "async-trait"
 version = "0.1.82"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1205,24 +1223,6 @@ checksum = "ce305eb0b4296696835b71df73eb912e0f1ffd2556a501fcede6e0c50349191c"
 dependencies = [
  "libc",
  "windows-sys",
-]
-
-[[package]]
-name = "swivel"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "axum",
- "bytes",
- "futures-util",
- "http 1.1.0",
- "http-body",
- "http-body-util",
- "pin-project-lite",
- "serde",
- "sync_wrapper 1.0.1",
- "tokio",
- "tower 0.5.1",
 ]
 
 [[package]]
