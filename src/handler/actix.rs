@@ -106,7 +106,7 @@ mod tests {
 
     #[actix_web::test]
     async fn test_handler_with_custom_handle_impl() {
-        let local_handler = Handle::new(Test);
+        let local_handler: Handle<Test, ()> = Handle::new(Test);
         let app = App::new().route("/", get().to(local_handler));
         let app = test::init_service(app).await;
         let req = test::TestRequest::get().uri("/").to_request();
@@ -114,5 +114,28 @@ mod tests {
         assert_eq!(res.status(), StatusCode::OK);
         let body = test::read_body(res).await;
         assert_eq!(body, "Hello World!");
+    }
+
+    impl Handler<String> for Test {
+        type Output = String;
+        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
+        fn call(&self, arg: String) -> Self::Future {
+            Box::pin(async move { format!("Hello, {}!", arg) })
+        }
+    }
+
+    #[actix_web::test]
+    async fn test_handler_with_custom_handle_impl_with_args() {
+        let local_handler: Handle<Test, String> = Handle::new(Test);
+        let app = App::new().route("/{arg}", get().to(local_handler));
+        let app = test::init_service(app).await;
+        let req = test::TestRequest::get()
+            .uri("/world")
+            .set_payload("world")
+            .to_request();
+        let res = test::call_service(&app, req).await;
+        assert_eq!(res.status(), StatusCode::OK);
+        let body = test::read_body(res).await;
+        assert_eq!(body, "Hello, world!");
     }
 }

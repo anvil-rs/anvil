@@ -1,10 +1,7 @@
 use std::{future::Future, pin::Pin};
 
 use axum::{
-    extract::{
-        FromRequest as AxumFromRequest,
-        Request as AxumRequest,
-    },
+    extract::{FromRequest as AxumFromRequest, Request as AxumRequest},
     handler::Handler as AxumHandler,
     response::IntoResponse as AxumIntoResponse,
     response::Response as AxumResponse,
@@ -120,7 +117,7 @@ mod tests {
         assert_eq!(response.status(), StatusCode::OK);
 
         let body = response.into_body().collect().await.unwrap().to_bytes();
-        assert_eq!(&body[..], b"Hello, world!");
+        assert_eq!(body, "Hello, world!");
     }
 
     async fn handler_with_args(arg: String) -> String {
@@ -146,7 +143,7 @@ mod tests {
         assert_eq!(response.status(), StatusCode::OK);
 
         let body = response.into_body().collect().await.unwrap().to_bytes();
-        assert_eq!(&body[..], b"Hello, world!");
+        assert_eq!(body, "Hello, world!");
     }
 
     #[derive(Deserialize, Clone)]
@@ -175,7 +172,7 @@ mod tests {
             .unwrap();
         assert_eq!(response.status(), StatusCode::OK);
         let body = response.into_body().collect().await.unwrap().to_bytes();
-        assert_eq!(&body[..], b"Hello, world! You are 42 years old");
+        assert_eq!(body, "Hello, world! You are 42 years old");
     }
 
     #[derive(Clone)]
@@ -193,7 +190,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_handler_with_custom_handle_impl() {
-        let local_handler = Handle::new(Test);
+        let local_handler: Handle<Test, ()> = Handle::new(Test);
         let app = axum::Router::new().route("/", get(local_handler));
         let response = app
             .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
@@ -201,6 +198,32 @@ mod tests {
             .unwrap();
         assert_eq!(response.status(), StatusCode::OK);
         let body = response.into_body().collect().await.unwrap().to_bytes();
-        assert_eq!(&body[..], b"Hello World!");
+        assert_eq!(body, "Hello World!");
+    }
+
+    impl Handler<(String,)> for Test {
+        type Output = String;
+        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
+        fn call(&self, (name,): (String,)) -> Self::Future {
+            Box::pin(async move { format!("Hello, {}!", name) })
+        }
+    }
+
+    #[tokio::test]
+    async fn test_handler_with_custom_handle_impl_with_args() {
+        let local_handler: Handle<Test, (String,)> = Handle::new(Test);
+        let app = axum::Router::new().route("/:name", get(local_handler));
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/world")
+                    .body(Body::from("world"))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let body = response.into_body().collect().await.unwrap().to_bytes();
+        assert_eq!(body, "Hello, world!");
     }
 }

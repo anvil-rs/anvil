@@ -1,3 +1,12 @@
+//! # Swivel
+//! Swivel is a web framework for Rust that aims to be simple, fast, and flexible.
+//! ## Ethos
+//! - Configuration in code.
+//! - User level abstraction should be minimal.
+//! - Each component should be interchangeable with __no__ code change.
+//! - The library provides the building blocks, not the solutions.
+//! - Rely on other's implementations.
+
 pub mod backends;
 
 pub mod routes;
@@ -8,7 +17,6 @@ pub mod extractors;
 
 /// Handlers and Handle
 pub mod handler;
-
 
 pub mod error;
 // struct Response {}

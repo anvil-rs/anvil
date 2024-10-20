@@ -9,6 +9,15 @@
 - The library provides the building blocks, not the solutions.
 - Rely on other's implementations.
 
+
+## TODO
+
+- [x] Handlers and handler functions.
+- [] Implement request and response types.
+  - [] Use hyper for this. Potentially re-export hyper's stuff because it is nicer than axum.
+  - [] Implement FromRequest and IntoResponse types. Not really feasible to implement for re-exported types.
+- [] Implement 
+
 ## Notes
 
 A pluggable web framework

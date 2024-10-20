@@ -1,4 +1,7 @@
+#[cfg(feature = "actix")]
 mod actix;
+
+#[cfg(feature = "actix")]
 mod axum;
 
 use std::{future::Future, marker::PhantomData};
