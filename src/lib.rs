@@ -7,31 +7,27 @@
 //! - The library provides the building blocks, not the solutions.
 //! - Rely on other's implementations.
 
+/// Backends for Swivel
 pub mod backends;
 
+/// Router and routing
 pub mod routes;
 
+/// Core http implementations.
 pub mod http;
 
+/// Extractors for requests.
 pub mod extractors;
 
 /// Handlers and Handle
 pub mod handler;
 
+/// Error handling.
 pub mod error;
-// struct Response {}
-//
-// trait IntoResponse {
-//     /// Create a response.
-//     fn into_response(self) -> Response;
-// }
-//
-// impl IntoResponse for () {
-//     fn into_response(self) -> Response {
-//         Response {}
-//     }
-// }
-//
+
+/// Middleware
+pub mod middleware;
+
 // trait Controller {
 //     fn index() -> impl IntoResponse {}
 //     fn show() -> impl IntoResponse {}
@@ -40,37 +36,4 @@ pub mod error;
 //     fn edit() -> impl IntoResponse {}
 //     fn update() -> impl IntoResponse {}
 //     fn delete() -> impl IntoResponse {}
-// }
-//
-// struct Test;
-//
-// impl Controller for Test {
-//     fn index() -> () {
-//         ()
-//     }
-// }
-//
-// trait Request {}
-//
-// struct Routes {
-//     prefix: Option<String>,
-//     handlers: Vec<Handler>,
-// }
-//
-// enum Method {
-//     GET,
-//     POST,
-//     PUT,
-//     DELETE,
-//     PATCH,
-//     OPTIONS,
-//     HEAD,
-//     CONNECT,
-//     TRACE,
-//     ANY,
-// }
-//
-// struct Handler {
-//     uri: String,
-//     method: Method,
 // }

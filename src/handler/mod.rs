@@ -25,7 +25,9 @@ pub trait Handler<Args>: Clone + Send + Sized + 'static {
 /// This is useful for abstracting over different handler types.
 /// We use PhantomData to carry over the types from our functions to whatever handler we are using.
 #[derive(Clone, Copy)]
-pub struct Handle<F, Args>(pub F, PhantomData<Args>);
+pub struct Handle<F, Args>(pub F, PhantomData<Args>)
+where
+    F: Handler<Args>;
 
 impl<F, Args> Handle<F, Args>
 where
@@ -38,8 +40,6 @@ where
         Self(handler, PhantomData)
     }
 }
-
-// TODO: Implement AsRef, AsMut, and From for Handle.
 
 /// Implement the Handler trait for the Handle struct.
 /// This allows us to call the Handler trait on our Handle struct.
