@@ -1,5 +1,5 @@
-//! # Swivel
-//! Swivel is a web framework for Rust that aims to be simple, fast, and flexible.
+//! # Anvil 
+//! Anvil is a web framework for Rust that aims to be simple, fast, and flexible.
 //! ## Ethos
 //! - Configuration in code.
 //! - User level abstraction should be minimal.
@@ -7,7 +7,7 @@
 //! - The library provides the building blocks, not the solutions.
 //! - Rely on other's implementations.
 
-/// Backends for Swivel
+/// Backends for Anvil.
 pub mod backends;
 
 /// Router and routing
