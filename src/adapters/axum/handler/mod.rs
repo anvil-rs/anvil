@@ -7,7 +7,7 @@ use axum::{
     response::Response as AxumResponse,
 };
 
-use super::{Handle, Handler};
+use crate::handler::{Handle, Handler};
 
 macro_rules! impl_handler {
     (

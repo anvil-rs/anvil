@@ -1,15 +1,5 @@
 use std::future::Future;
 
-pub struct Request;
-pub struct Response;
-
-pub trait FromRequest: Sized {
-    type Error: Into<Response>;
-    type Future: Future<Output = Result<Self, Self::Error>>;
-
-    fn from_request(req: &Request) -> Result<Self, Self::Error>;
-}
-
 pub struct Extractor<T>(pub T);
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]

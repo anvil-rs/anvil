@@ -1,6 +1,6 @@
 use actix_web::{Handler as ActixHandler, Responder};
 
-use super::{Handle, Handler};
+use crate::handler::{Handle, Handler};
 
 impl<F, Args> ActixHandler<Args> for Handle<F, Args>
 where

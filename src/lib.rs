@@ -1,4 +1,4 @@
-//! # Anvil 
+//! # Anvil
 //! Anvil is a web framework for Rust that aims to be simple, fast, and flexible.
 //! ## Ethos
 //! - Configuration in code.
@@ -8,7 +8,7 @@
 //! - Rely on other's implementations.
 
 /// Backends for Anvil.
-pub mod backends;
+pub mod adapters;
 
 /// Router and routing
 pub mod routes;

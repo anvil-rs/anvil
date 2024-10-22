@@ -13,7 +13,7 @@ use sync_wrapper::SyncStream;
 
 type BoxBody = UnsyncBoxBody<Bytes, Error>;
 
-fn boxed<B>(body: B) -> BoxBody
+pub fn boxed<B>(body: B) -> BoxBody
 where
     B: http_body::Body<Data = Bytes> + Send + 'static,
     B::Error: Into<BoxError>,
