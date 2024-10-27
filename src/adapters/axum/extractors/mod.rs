@@ -1,7 +1,5 @@
 use crate::error::{BoxError, Error};
 
-struct Test;
-
 // impl FromRequest for Test {
 // type Error = Error;
 //

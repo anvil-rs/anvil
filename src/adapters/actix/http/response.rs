@@ -16,6 +16,10 @@ impl From<StatusCode> for actix_web::http::StatusCode {
 impl From<Response> for ActixHttpResponse {
     fn from(value: Response) -> Self {
         let (parts, body) = value.0.into_parts();
+
+        // Response::from(parts);
+        // ActixHttpResponse::from(parts.into());
+
         // TODO: Implement the rest of the http request.
         ActixHttpResponse::build(
             actix_web::http::StatusCode::from_u16(parts.status.as_u16()).unwrap(),
@@ -28,16 +32,7 @@ impl From<ActixHttpResponse> for Response {
     fn from(value: ActixHttpResponse) -> Self {
         let (parts, body) = value.into_parts();
 
-        let bytes = body.try_into_bytes();
-
-        let bytes = match bytes {
-            Ok(bytes) => bytes,
-            Err(_) => unimplemented!(),
-        };
-
-        let body = Body::from(bytes);
-
-        todo!()
+        Response::new(body.into())
     }
 }
 
@@ -50,5 +45,28 @@ where
     /// WARN: The `req` parameter is not used.
     fn respond_to(self, _req: &actix_web::HttpRequest) -> ActixHttpResponse<Self::Body> {
         self.0.into_response().into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    use actix_web::body::to_bytes;
+
+    #[actix_web::test]
+    async fn test_anvil_to_actix_response_conversion() {
+        let response = Response::new("Hello, World!".into());
+        let actix_response: ActixHttpResponse = response.into();
+        let bytes = to_bytes(actix_response.into_body()).await.unwrap();
+        assert_eq!(bytes, "Hello, World!");
+    }
+
+    #[actix_web::test]
+    async fn test_actix_to_anvil_response_conversion() {
+        let actix_response = actix_web::HttpResponse::Ok().body("Hello, World!");
+        let response: Response = actix_response.into();
+        let bytes = to_bytes(response.0.into_body()).await.unwrap();
+        assert_eq!(bytes, "Hello, World!");
     }
 }

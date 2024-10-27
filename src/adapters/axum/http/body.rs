@@ -15,7 +15,7 @@ impl From<Body> for axum::body::Body {
 }
 
 #[cfg(test)]
-pub mod test {
+pub mod tests {
     use super::*;
     use http_body_util::BodyExt;
 

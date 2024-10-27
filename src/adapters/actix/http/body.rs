@@ -1,38 +1,29 @@
-use std::{pin::Pin, sync::Mutex};
+use std::{pin::Pin, sync::Mutex, task::Context};
 
-use actix_web::body::{BoxBody, MessageBody};
+use actix_web::body::{BodySize, BoxBody, MessageBody};
 use bytes::Bytes;
 use http_body::{Body as HttpBody, Frame};
-use http_body_util::BodyExt;
 
 use crate::{
     error::Error,
     http::body::{boxed, Body},
 };
 
-// pub struct ActixBody<T: MessageBody<Error = Error>>(T);
-
-// impl<T: MessageBody<Error = Error>> From<ActixBody<T>> for Body {
-//     fn from(value: ActixBody<T>) -> Self {
-//         todo!()
-//     }
-// }
-
-impl MessageBody for crate::http::body::Body {
+impl MessageBody for Body {
     type Error = Error;
 
-    fn size(&self) -> actix_web::body::BodySize {
+    fn size(&self) -> BodySize {
         match self.size_hint().exact() {
             // If we do know the size, set it.
-            Some(size) => actix_web::body::BodySize::Sized(size),
+            Some(size) => BodySize::Sized(size),
             // We are streaming by default, so we probably don't know the body size
-            None => actix_web::body::BodySize::Stream,
+            None => BodySize::Stream,
         }
     }
 
     fn poll_next(
         self: Pin<&mut Self>,
-        cx: &mut std::task::Context<'_>,
+        cx: &mut Context<'_>,
     ) -> std::task::Poll<Option<Result<Bytes, Self::Error>>> {
         self.poll_frame(cx).map(|opt| {
             opt.map(|res| res.map(|e| Frame::into_data(e).expect("Frame should have data")))
@@ -40,123 +31,66 @@ impl MessageBody for crate::http::body::Body {
     }
 }
 
-// impl<T> From<Body> for ActixBody<T>
-// where
-//     T: MessageBody<Error = Error> + Unpin + Send + 'static,
-// {
-//     fn from(value: Body) -> Self {
-//         // todo!()
-//         // ActixBody(value)
-//     }
-// }
+struct BoxBodyWrapper(Mutex<BoxBody>);
 
-// impl From<Box<dyn std::error::Error + Send + Sync>> for Error {
-//     fn from(e: Box<dyn std::error::Error + Send + Sync>) -> Self {
-//         Error::new(e)
-//     }
-// }
+impl HttpBody for BoxBodyWrapper {
+    type Data = Bytes;
+    type Error = Error;
+    fn poll_frame(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> std::task::Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
+        self.0
+            .lock()
+            .expect("Lock of BoxBody should not be poisoned")
+            .as_pin_mut()
+            .poll_next(cx)
+            .map(|opt| opt.map(|res| res.map_err(|e| Error::new(e.to_string())).map(Frame::data)))
+    }
+}
 
-// struct ActixBody<T: MessageBody>(T);
-//
-// #[derive(Debug)]
-// struct ActixBoxBody(Mutex<actix_web::body::BoxBody>);
+/// The `BoxBodyWrapper` is !Send by default, so we implement Send for it.
+/// This is safe because we are wrapping the BoxBody in a Mutex.
+unsafe impl Send for BoxBodyWrapper {}
 
-// impl<T> http_body::Body for ActixBody<T>
-// where
-//     T: MessageBody<Error = Error> + Unpin,
-// {
-//     type Data = Bytes;
-//     type Error = Error;
-//     fn poll_frame(
-//         self: std::pin::Pin<&mut Self>,
-//         cx: &mut std::task::Context<'_>,
-//     ) -> std::task::Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
-//         Pin::new(&mut self.get_mut().0)
-//             .poll_next(cx)
-//             .map(|opt| opt.map(|res| res.map_err(Error::new).map(Frame::data)))
-//     }
-// }
+/// Convert an [`actix_web::body::BoxBody`] into an [`Body`].
+/// An Actix BoxBody is !Send by default, so we wrap it in a Mutex.
+impl From<BoxBody> for Body {
+    fn from(value: BoxBody) -> Self {
+        let wrapper = BoxBodyWrapper(Mutex::new(value));
+        Body::new(boxed(wrapper))
+    }
+}
 
-// impl http_body::Body for ActixBoxBody {
-//     type Data = Bytes;
-//     type Error = Error;
-//     fn poll_frame(
-//         self: std::pin::Pin<&mut Self>,
-//         cx: &mut std::task::Context<'_>,
-//     ) -> std::task::Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
-//         Pin::new(&mut self.get_mut().0)
-//             .lock()
-//             .unwrap()
-//             .as_pin_mut()
-//             .poll_next(cx)
-//             .map(|opt| opt.map(|res| res.map_err(|e| Error::new(e.to_string())).map(Frame::data)))
-//         // .poll_next(cx)
-//         // .map(|opt| opt.map(|res| res.map_err(|e| Error::new(e.to_string())).map(Frame::data)))
-//     }
-// }
-
-// impl From<ActixBoxBody> for Body {
-//     fn from(value: ActixBoxBody) -> Self {
-//         Self::empty()
-//         // Body::new()
-//     }
-// }
-
-// impl<T> From<ActixBody<T>> for Body
-// where
-//     T: MessageBody<Error = Error> + Unpin + Send + 'static,
-// {
-//     fn from(value: ActixBody<T>) -> Self {
-//         Body::new(boxed(value))
-//     }
-// }
-
-// impl<T> From<Body> for ActixBody<T>
-// where
-//     T: MessageBody<Error = Error> + Unpin + Send + 'static,
-// {
-//     fn from(value: Body) -> Self {
-//         ActixBody(value)
-//     }
-// }
-
-// impl From<ActixBody> for crate::http::body::Body {
-//     fn from(value: ActixBody) -> Self {
-//         Body::new(boxed(value))
-//     }
-// }
-
-// USE BOX BODY
+impl From<Body> for BoxBody {
+    /// `Body` implements [`actix_web::body::MessageBody`] therefore we can construct a [`actix_web::body::BoxBody`]
+    ///  from our own body type.
+    ///
+    /// [`actix_web::body::BoxBody`]: https://docs.rs/actix-web/latest/actix_web/body/struct.BoxBody.html
+    /// [`actix_web::body::MessageBody`]: https://docs.rs/actix-web/latest/actix_web/body/trait.MessageBody.html
+    fn from(value: Body) -> Self {
+        BoxBody::new(value)
+    }
+}
 
 #[cfg(test)]
-mod test {
-
+mod tests {
     use super::*;
-    use http_body_util::BodyExt;
+    use actix_web::body::to_bytes;
 
     #[actix_web::test]
     async fn test_actix_to_anvil_body_conversion() {
-        // let actix_body = actix_web::body::Body::from("Hello, World!");
-        // let body: Body = ActixBody(actix_body).into();
-        // let bytes = body.collect().await.unwrap().to_bytes();
-        // assert_eq!(bytes, "Hello, World!");
+        let actix_body = actix_web::body::BoxBody::new("Hello, World!");
+        let body: Body = actix_body.into();
+        let bytes = to_bytes(body).await.unwrap();
+        assert_eq!(bytes, "Hello, World!");
     }
 
-    // #[tokio::test]
-    // async fn test_anvil_to_axum_body_conversion() {
-    //     let body = Body::from("Hello, World!".to_string());
-    //     let axum_body: axum::body::Body = body.into();
-    //
-    //     let bytes = axum_body.collect().await.unwrap().to_bytes();
-    //
-    //     assert_eq!(bytes, "Hello, World!");
-    // }
-    //
-    // #[tokio::test]
-    // async fn test_axum_to_anvil_body_conversion() {
-    //     let axum_body = axum::body::Body::from("Hello, World!".to_string());
-    //     let body: Body = axum_body.into();
-    //     let bytes = body.collect().await.unwrap().to_bytes();
-    //     assert_eq!(bytes, "Hello, World!");
-    // }
+    #[actix_web::test]
+    async fn test_anvil_to_actix_body_conversion() {
+        let body = Body::from("Hello, World!");
+        let actix_body: actix_web::body::BoxBody = body.into();
+        let bytes = to_bytes(actix_body).await.unwrap();
+        assert_eq!(bytes, "Hello, World!");
+    }
 }
