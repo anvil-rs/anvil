@@ -9,21 +9,17 @@ use crate::http::{
 
 impl From<Response> for ActixHttpResponse {
     fn from(value: Response) -> Self {
-        let (parts, body) = value.0.into_parts();
-
-        let status = parts.status;
-
-        let headers = parts.headers;
+        let (parts, body) = value.into_parts();
 
         let mut builder = ActixHttpResponse::build(
-            actix_web::http::StatusCode::from_u16(status.as_u16()).expect("Invalid status code"),
+            actix_web::http::StatusCode::from_u16(parts.status.as_u16())
+                .expect("Invalid status code"),
         );
 
-        for (key, value) in headers {
-            builder.append_header((
-                key.expect("Invalid header name").as_str(),
-                value.to_str().unwrap(),
-            ));
+        for (key, value) in parts.headers {
+            if let (Some(name), Ok(val)) = (key, value.to_str()) {
+                builder.append_header((name.as_str(), val));
+            }
         }
 
         builder.body(body)
@@ -34,14 +30,9 @@ impl From<ActixHttpResponse> for Response {
     fn from(value: ActixHttpResponse) -> Self {
         let (parts, body) = value.into_parts();
 
-        let status = parts.status();
+        let mut builder = http::response::Builder::new().status(parts.status().as_u16());
 
-        let headers = parts.headers();
-
-        let mut builder = http::response::Builder::new()
-            .status(http::StatusCode::from_u16(status.as_u16()).expect("Invalid status code"));
-
-        for (key, value) in headers {
+        for (key, value) in parts.headers().iter() {
             builder = builder.header(key.as_str(), value.as_bytes());
         }
 
@@ -91,12 +82,10 @@ mod tests {
         let mut response = Response::new("Hello, World!".into());
 
         response
-            .0
             .headers_mut()
             .insert("Content-Type", "text/plain".parse().unwrap());
 
         response
-            .0
             .headers_mut()
             .insert("Content-Length", "13".parse().unwrap());
         let actix_response: ActixHttpResponse = response.into();
@@ -127,10 +116,10 @@ mod tests {
         let response: Response = actix_response.into();
 
         assert_eq!(
-            response.0.headers().get("Content-Type").unwrap(),
+            response.headers().get("Content-Type").unwrap(),
             "text/plain"
         );
 
-        assert_eq!(response.0.headers().get("Content-Length").unwrap(), "13");
+        assert_eq!(response.headers().get("Content-Length").unwrap(), "13");
     }
 }

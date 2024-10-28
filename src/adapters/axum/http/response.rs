@@ -11,7 +11,7 @@ impl From<axum::response::Response> for Response {
 
 impl From<Response> for axum::response::Response {
     fn from(value: Response) -> Self {
-        let (parts, body) = value.0.into_parts();
+        let (parts, body) = value.into_parts();
         axum::response::Response::from_parts(parts, body.into())
     }
 }
@@ -56,11 +56,9 @@ mod tests {
         let mut response = Response::new("Hello, World!".into());
 
         response
-            .0
             .headers_mut()
             .insert("Content-Type", "text/plain".parse().unwrap());
         response
-            .0
             .headers_mut()
             .insert("Content-Length", "13".parse().unwrap());
 
@@ -90,11 +88,11 @@ mod tests {
         let response: Response = axum_response.into();
 
         assert_eq!(
-            response.0.headers().get("Content-Type").unwrap(),
+            response.headers().get("Content-Type").unwrap(),
             "text/plain"
         );
 
-        assert_eq!(response.0.headers().get("Content-Length").unwrap(), "13");
+        assert_eq!(response.headers().get("Content-Length").unwrap(), "13");
     }
 
     #[tokio::test]
