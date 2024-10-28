@@ -47,7 +47,6 @@ mod tests {
     }
 
     async fn handler_with_args(arg: String) -> String {
-        println!("arg: {}", arg);
         format!("Hello, {}!", arg)
     }
 

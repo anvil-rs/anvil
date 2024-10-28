@@ -1,30 +1,32 @@
-use actix_web::{body::MessageBody, HttpResponse as ActixHttpResponse};
+use std::{any::Any, borrow::BorrowMut, ops::Deref};
+
+use actix_web::HttpResponse as ActixHttpResponse;
 
 use crate::http::{
     body::Body,
     response::{IntoResponse, Responder, Response},
 };
 
-struct StatusCode(http::StatusCode);
-
-impl From<StatusCode> for actix_web::http::StatusCode {
-    fn from(value: StatusCode) -> Self {
-        actix_web::http::StatusCode::from_u16(value.0.as_u16()).unwrap()
-    }
-}
-
 impl From<Response> for ActixHttpResponse {
     fn from(value: Response) -> Self {
         let (parts, body) = value.0.into_parts();
 
-        // Response::from(parts);
-        // ActixHttpResponse::from(parts.into());
+        let status = parts.status;
 
-        // TODO: Implement the rest of the http request.
-        ActixHttpResponse::build(
-            actix_web::http::StatusCode::from_u16(parts.status.as_u16()).unwrap(),
-        )
-        .body(body)
+        let headers = parts.headers;
+
+        let mut builder = ActixHttpResponse::build(
+            actix_web::http::StatusCode::from_u16(status.as_u16()).expect("Invalid status code"),
+        );
+
+        for (key, value) in headers {
+            builder.append_header((
+                key.expect("Invalid header name").as_str(),
+                value.to_str().unwrap(),
+            ));
+        }
+
+        builder.body(body)
     }
 }
 
@@ -32,7 +34,21 @@ impl From<ActixHttpResponse> for Response {
     fn from(value: ActixHttpResponse) -> Self {
         let (parts, body) = value.into_parts();
 
-        Response::new(body.into())
+        let status = parts.status();
+
+        let headers = parts.headers();
+
+        let mut builder = http::response::Builder::new()
+            .status(http::StatusCode::from_u16(status.as_u16()).expect("Invalid status code"));
+
+        for (key, value) in headers {
+            builder = builder.header(key.as_str(), value.as_bytes());
+        }
+
+        let response: http::response::Response<Body> =
+            builder.body(body.into()).expect("Invalid body");
+
+        Response::from(response)
     }
 }
 
@@ -55,7 +71,7 @@ mod tests {
     use actix_web::body::to_bytes;
 
     #[actix_web::test]
-    async fn test_anvil_to_actix_response_conversion() {
+    async fn test_anvil_to_actix_response_body_conversion() {
         let response = Response::new("Hello, World!".into());
         let actix_response: ActixHttpResponse = response.into();
         let bytes = to_bytes(actix_response.into_body()).await.unwrap();
@@ -63,10 +79,58 @@ mod tests {
     }
 
     #[actix_web::test]
-    async fn test_actix_to_anvil_response_conversion() {
+    async fn test_actix_to_anvil_response_body_conversion() {
         let actix_response = actix_web::HttpResponse::Ok().body("Hello, World!");
         let response: Response = actix_response.into();
         let bytes = to_bytes(response.0.into_body()).await.unwrap();
         assert_eq!(bytes, "Hello, World!");
+    }
+
+    #[actix_web::test]
+    async fn test_anvil_to_actix_response_header_conversion() {
+        let mut response = Response::new("Hello, World!".into());
+
+        response
+            .0
+            .headers_mut()
+            .insert("Content-Type", "text/plain".parse().unwrap());
+
+        response
+            .0
+            .headers_mut()
+            .insert("Content-Length", "13".parse().unwrap());
+        let actix_response: ActixHttpResponse = response.into();
+
+        assert_eq!(
+            actix_response.headers().get("Content-Type").unwrap(),
+            "text/plain"
+        );
+
+        assert_eq!(
+            actix_response.headers().get("Content-Length").unwrap(),
+            "13"
+        );
+    }
+
+    #[actix_web::test]
+    async fn test_actix_to_anvil_response_header_conversion() {
+        let mut actix_response = actix_web::HttpResponse::Ok().body("Hello, World!");
+        actix_response.headers_mut().append(
+            actix_web::http::header::CONTENT_TYPE,
+            "text/plain".parse().unwrap(),
+        );
+        actix_response.headers_mut().append(
+            actix_web::http::header::CONTENT_LENGTH,
+            "13".parse().unwrap(),
+        );
+
+        let response: Response = actix_response.into();
+
+        assert_eq!(
+            response.0.headers().get("Content-Type").unwrap(),
+            "text/plain"
+        );
+
+        assert_eq!(response.0.headers().get("Content-Length").unwrap(), "13");
     }
 }

@@ -1,4 +1,8 @@
-use std::{pin::Pin, sync::Mutex, task::Context};
+use std::{
+    pin::Pin,
+    sync::{Arc, Mutex},
+    task::Context,
+};
 
 use actix_web::body::{BodySize, BoxBody, MessageBody};
 use bytes::Bytes;
@@ -31,7 +35,7 @@ impl MessageBody for Body {
     }
 }
 
-struct BoxBodyWrapper(Mutex<BoxBody>);
+struct BoxBodyWrapper(BoxBody);
 
 impl HttpBody for BoxBodyWrapper {
     type Data = Bytes;
@@ -40,9 +44,8 @@ impl HttpBody for BoxBodyWrapper {
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
     ) -> std::task::Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
-        self.0
-            .lock()
-            .expect("Lock of BoxBody should not be poisoned")
+        self.get_mut()
+            .0
             .as_pin_mut()
             .poll_next(cx)
             .map(|opt| opt.map(|res| res.map_err(|e| Error::new(e.to_string())).map(Frame::data)))
@@ -50,14 +53,14 @@ impl HttpBody for BoxBodyWrapper {
 }
 
 /// The `BoxBodyWrapper` is !Send by default, so we implement Send for it.
-/// This is safe because we are wrapping the BoxBody in a Mutex.
+/// We will ensure that any error that is sent by actix is Send anyway.
 unsafe impl Send for BoxBodyWrapper {}
 
 /// Convert an [`actix_web::body::BoxBody`] into an [`Body`].
 /// An Actix BoxBody is !Send by default, so we wrap it in a Mutex.
 impl From<BoxBody> for Body {
     fn from(value: BoxBody) -> Self {
-        let wrapper = BoxBodyWrapper(Mutex::new(value));
+        let wrapper = BoxBodyWrapper(value);
         Body::new(boxed(wrapper))
     }
 }

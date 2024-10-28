@@ -17,6 +17,13 @@ pub struct Form<T>(pub T);
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Header<T>(pub T);
 
+/// The extension extractor is different from the others.
+/// We need to implement it differently from the others, as it is impossible to map from a foreign
+/// type's extension into our own extension type.
+/// Therefore we must implement extension (or state/data) for each framework.
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+pub struct Extensions<T>(pub T);
+
 // Now we need a generic-enough value extractor.
 // Axum Handler === Actix Responder In actix, we deal with responders on a user-level.
 
