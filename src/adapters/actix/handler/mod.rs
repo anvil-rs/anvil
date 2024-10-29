@@ -21,8 +21,6 @@ where
 
 #[cfg(test)]
 mod tests {
-    use std::{future::Future, pin::Pin};
-
     use super::*;
     use actix_web::{
         http::StatusCode,
