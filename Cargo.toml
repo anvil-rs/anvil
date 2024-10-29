@@ -19,10 +19,8 @@ axum = []
 actix = []
 
 [dependencies]
-async-trait = { version="0.1.83" }
-
-axum = { version = "0.7", features = ["macros"] }   # Replace with the actual version
-actix-web = { version = "4.0" }  # Replace with the actual version
+axum = { version = "0.7", features = ["macros"] }
+actix-web = { version = "4.0" }
 tokio = { version = "1.40.0", features = [ "rt-multi-thread" ]}
 serde = { version = "1.0.210", features = ["derive"] }
 http = "1.1.0"
@@ -36,14 +34,3 @@ pin-project-lite = "0.2.14"
 [dev-dependencies]
 http-body-util = "0.1.2"
 tower = "0.5.1"
-
-[package.metadata.cargo-public-api-crates]
-allowed = [
-    # >=1.0
-    "async_trait",
-    "bytes",
-    "http",
-    "http_body",
-    "serde",
-    "tokio",
-]

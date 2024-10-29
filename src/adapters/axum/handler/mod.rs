@@ -17,7 +17,7 @@ macro_rules! impl_handler {
         impl<T, S, M, $($ty,)* $last> AxumHandler<(M, $($ty,)* $last,), S> for Handle<T, ($($ty,)* $last,)>
         where
             T: Handler<($($ty,)* $last,)> + Clone + 'static,
-            T::Output: AxumIntoResponse + Send ,
+            T::Output: AxumIntoResponse + Send,
             S: Send + Sync + 'static,
             ($($ty,)* $last,): AxumFromRequest<S, M> + Send + 'static + Clone,
         {

@@ -242,7 +242,6 @@ name = "anvil"
 version = "0.1.0"
 dependencies = [
  "actix-web",
- "async-trait",
  "axum",
  "bytes",
  "futures-util",
