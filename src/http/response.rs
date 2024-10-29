@@ -1,3 +1,5 @@
+use std::convert::Infallible;
+
 use http::{response::Parts, HeaderMap, HeaderValue, StatusCode};
 
 use crate::http::body::Body;
@@ -121,5 +123,11 @@ where
 impl IntoResponse for Response {
     fn into_response(self) -> Response {
         self
+    }
+}
+
+impl IntoResponse for Infallible {
+    fn into_response(self) -> Response {
+        match self {}
     }
 }

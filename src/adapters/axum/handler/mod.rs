@@ -16,9 +16,8 @@ macro_rules! impl_handler {
         #[allow(non_snake_case, unused_mut)]
         impl<T, S, M, $($ty,)* $last> AxumHandler<(M, $($ty,)* $last,), S> for Handle<T, ($($ty,)* $last,)>
         where
-            T: Handler<($($ty,)* $last,)> + Clone,
+            T: Handler<($($ty,)* $last,)> + Clone + 'static,
             T::Output: AxumIntoResponse + Send ,
-            T::Future: Future<Output = T::Output> + Send,
             S: Send + Sync + 'static,
             ($($ty,)* $last,): AxumFromRequest<S, M> + Send + 'static + Clone,
         {
@@ -42,9 +41,8 @@ macro_rules! impl_handler {
 // Initially implemented for 0 arguments
 impl<T, S> AxumHandler<((),), S> for Handle<T, ()>
 where
-    T: Handler<()>,
+    T: Handler<()> + 'static,
     T::Output: AxumIntoResponse + Send,
-    T::Future: Future<Output = T::Output> + Send,
     S: Send + Sync + 'static,
 {
     type Future = Pin<Box<dyn Future<Output = axum::response::Response> + Send>>;
@@ -181,10 +179,8 @@ mod tests {
     impl Handler<()> for Test {
         type Output = String;
 
-        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
-
-        fn call(&self, _: ()) -> Self::Future {
-            Box::pin(async move { "Hello World!".to_string() })
+        async fn call(&self, _: ()) -> Self::Output {
+            "Hello World!".to_string()
         }
     }
 
@@ -203,9 +199,8 @@ mod tests {
 
     impl Handler<(String,)> for Test {
         type Output = String;
-        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
-        fn call(&self, (name,): (String,)) -> Self::Future {
-            Box::pin(async move { format!("Hello, {}!", name) })
+        async fn call(&self, (name,): (String,)) -> Self::Output {
+            format!("Hello, {}!", name)
         }
     }
 

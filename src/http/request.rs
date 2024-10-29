@@ -1,14 +1,29 @@
-use std::future::Future;
+use std::{convert::Infallible, future::Future};
+
+use async_trait::async_trait;
 
 use crate::http::body::Body;
 
-use super::response::Response;
+use super::response::IntoResponse;
 
-pub struct Request(http::Request<Body>);
+pub struct Request<T = Body>(http::Request<T>);
 
-pub trait FromRequest: Sized {
-    type Error: Into<Response>;
-    type Future: Future<Output = Result<Self, Self::Error>>;
+pub trait FromRequest<S>: Sized {
+    type Error: IntoResponse;
 
-    fn from_request(req: &Request) -> Result<Self, Self::Error>;
+    fn from_request(
+        req: Request,
+        state: &S,
+    ) -> impl Future<Output = Result<Self, Self::Error>> + Send;
+}
+
+impl<S> FromRequest<S> for Request
+where
+    S: Send + Sync,
+{
+    type Error = Infallible;
+
+    async fn from_request(req: Request, state: &S) -> Result<Self, Self::Error> {
+        Ok(req)
+    }
 }

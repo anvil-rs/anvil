@@ -7,6 +7,9 @@
 //! - The library provides the building blocks, not the solutions.
 //! - Rely on other's implementations.
 
+#[doc(no_inline)]
+pub use async_trait::async_trait;
+
 /// Backends for Anvil.
 pub mod adapters;
 

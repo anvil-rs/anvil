@@ -8,11 +8,11 @@ use std::{future::Future, marker::PhantomData};
 ///
 /// It is not the handlers responsibility to convert the request into the arguments that it
 /// requires. This is the responsibility of the service that is calling the handler.
-pub trait Handler<Args>: Clone + Send + Sized + 'static {
+pub trait Handler<Args>: Clone + Send + Sized {
     type Output;
-    type Future: Future<Output = Self::Output> + Send + 'static;
+    // type Future: Future<Output = Self::Output> + Send + 'static;
     // We make this future-like so that it can handle both async (Axum) and sync (Actix).
-    fn call(&self, args: Args) -> Self::Future;
+    fn call(&self, args: Args) -> impl Future<Output = Self::Output> + Send;
 }
 
 /// A handle that wraps a handler, and can be used to call the handler.
@@ -25,9 +25,8 @@ where
 
 impl<F, Args> Handle<F, Args>
 where
-    F: Handler<Args> + Clone + Send + Sync + 'static,
-    Args: Clone + Send + Sync + 'static,
-    F::Future: Send,
+    F: Handler<Args> + Clone + Send + Sync,
+    Args: Clone + Send + Sync,
 {
     /// Create a new handle.
     pub fn new(handler: F) -> Self {
@@ -40,30 +39,28 @@ where
 /// This is useful for abstracting over different handler types.
 impl<F, Args> Handler<Args> for Handle<F, Args>
 where
-    F: Handler<Args> + Clone + Send + Sync + 'static,
-    Args: Clone + Send + Sync + 'static,
-    F::Future: Send,
+    F: Handler<Args> + Clone + Send + Sync,
+    Args: Clone + Send + Sync,
 {
     type Output = F::Output;
-    type Future = F::Future;
-    fn call(&self, args: Args) -> Self::Future {
-        self.0.call(args)
+    async fn call(&self, args: Args) -> Self::Output {
+        self.0.call(args).await
     }
 }
 
 macro_rules! factory_tuple ({ $($param:ident)* } => {
     impl<Func, Fut, $($param,)*> Handler<($($param,)*)> for Func
     where
-        Func: FnOnce($($param),*) -> Fut + Clone + Copy + Send + Sync + 'static,
-        Fut: Future + Send + 'static,
+        Func: FnOnce($($param),*) -> Fut + Clone + Copy + Send + Sync,
+        Fut: Future + Send,
+        $($param: Send + Sync,)*
     {
         type Output = Fut::Output;
-        type Future = Fut;
 
         #[inline]
         #[allow(non_snake_case)]
-        fn call(&self, ($($param,)*): ($($param,)*)) -> Self::Future {
-            (self)($($param,)*)
+        async fn call(&self, ($($param,)*): ($($param,)*)) -> Self::Output {
+            (self)($($param,)*).await
         }
     }
 });

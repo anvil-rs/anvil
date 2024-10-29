@@ -1,3 +1,5 @@
+use std::future::Future;
+
 use actix_web::{Handler as ActixHandler, Responder};
 
 use crate::handler::{Handle, Handler};
@@ -5,15 +7,15 @@ use crate::handler::{Handle, Handler};
 impl<F, Args> ActixHandler<Args> for Handle<F, Args>
 where
     F: Handler<Args> + Sized + Send + Sync + 'static,
-    F::Output: Responder,
-    F::Future: Send + 'static,
+    F::Output: Responder + Sized + 'static,
     Args: Clone + Send + Sync + 'static,
 {
     type Output = F::Output;
-    type Future = F::Future;
+    type Future = std::pin::Pin<Box<dyn Future<Output = Self::Output> + Send + 'static>>;
 
     fn call(&self, args: Args) -> Self::Future {
-        Handler::call(&self.0, args)
+        let handler = self.0.clone();
+        Box::pin(async move { handler.call(args).await })
     }
 }
 
@@ -96,10 +98,8 @@ mod tests {
     impl Handler<()> for Test {
         type Output = String;
 
-        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
-
-        fn call(&self, _: ()) -> Self::Future {
-            Box::pin(async move { "Hello World!".to_string() })
+        async fn call(&self, _: ()) -> Self::Output {
+            "Hello World!".to_string()
         }
     }
 
@@ -117,9 +117,8 @@ mod tests {
 
     impl Handler<String> for Test {
         type Output = String;
-        type Future = Pin<Box<dyn Future<Output = Self::Output> + Send>>;
-        fn call(&self, arg: String) -> Self::Future {
-            Box::pin(async move { format!("Hello, {}!", arg) })
+        async fn call(&self, arg: String) -> Self::Output {
+            format!("Hello, {}!", arg)
         }
     }
 
