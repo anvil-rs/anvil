@@ -1,12 +1,57 @@
 use std::{convert::Infallible, future::Future};
 
-use http::request::Parts;
+use http::{request::Parts, HeaderMap, HeaderValue};
 
 use crate::http::body::Body;
 
 use super::response::IntoResponse;
 
-pub struct Request<T = Body>(http::Request<T>);
+pub struct Request<T = Body>(pub http::Request<T>);
+
+impl<T> Request<T> {
+    #[inline]
+    pub fn new(body: T) -> Self {
+        Self(http::Request::new(body))
+    }
+
+    #[inline]
+    pub fn from_parts(parts: Parts, body: T) -> Self {
+        Self(http::Request::from_parts(parts, body))
+    }
+
+    #[inline]
+    pub fn headers(&self) -> &HeaderMap<HeaderValue> {
+        self.0.headers()
+    }
+
+    #[inline]
+    pub fn headers_mut(&mut self) -> &mut HeaderMap<HeaderValue> {
+        self.0.headers_mut()
+    }
+
+    #[inline]
+    pub fn body(&self) -> &T {
+        self.0.body()
+    }
+
+    #[inline]
+    pub fn into_body(self) -> T {
+        self.0.into_body()
+    }
+
+    #[inline]
+    pub fn into_parts(self) -> (Parts, T) {
+        self.0.into_parts()
+    }
+
+    #[inline]
+    pub fn map<F, U>(self, f: F) -> Request<U>
+    where
+        F: FnOnce(T) -> U,
+    {
+        Request(self.0.map(f))
+    }
+}
 
 // TODO: Move this into the extract module.
 

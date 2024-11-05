@@ -1,5 +1,7 @@
 use std::future::Future;
 
+use crate::http::request::FromRequest;
+
 pub struct Extractor<T>(pub T);
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -16,6 +18,9 @@ pub struct Form<T>(pub T);
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Header<T>(pub T);
+
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+pub struct State<T>(pub T);
 
 /// The extension extractor is different from the others.
 /// We need to implement it differently from the others, as it is impossible to map from a foreign
@@ -42,8 +47,9 @@ pub struct Extensions<T>(pub T);
 // HttpRequest - HttpRequest is itself an extractor, in case you need access to other parts of the request.
 // String - You can convert a request's payload to a String. An example is available in the rustdoc.
 // Bytes - You can convert a request's payload into Bytes. An example is available in the rustdoc.
-// Payload - Low-level payload extractor primarily for building other extractors. An example is available in the rustdoc.
-
+// Payload - Low-level payload extractor primarily for building other extractors. An example is available in the rustdoc. - actix
+// We have TYPED DATA, and we have UNTYPED extensions as well.
+//
 // For some sort of General implementation of extractors for models, we can leverage the fact that
 // a PATH extractor with #[Deserialize] can be used to extract only a single param, even if
 // multiple params are there. This means that we can extract a struct with the param name. This
