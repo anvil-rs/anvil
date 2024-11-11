@@ -2,16 +2,15 @@ use std::future::Future;
 
 use crate::http::request::FromRequest;
 
-pub struct Extractor<T>(pub T);
+pub mod bytes;
+
+pub mod json;
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Path<T>(pub T);
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Query<T>(pub T);
-
-#[derive(Debug)]
-pub struct Json<T>(pub T);
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Form<T>(pub T);
@@ -21,13 +20,6 @@ pub struct Header<T>(pub T);
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct State<T>(pub T);
-
-/// The extension extractor is different from the others.
-/// We need to implement it differently from the others, as it is impossible to map from a foreign
-/// type's extension into our own extension type.
-/// Therefore we must implement extension (or state/data) for each framework.
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
-pub struct Extensions<T>(pub T);
 
 // Now we need a generic-enough value extractor.
 // Axum Handler === Actix Responder In actix, we deal with responders on a user-level.

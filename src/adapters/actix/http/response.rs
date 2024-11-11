@@ -4,7 +4,10 @@ use actix_web::HttpResponse as ActixHttpResponse;
 
 use crate::http::{
     body::Body,
-    response::{IntoResponse, Responder, Response},
+    response::{
+        into_response::{IntoResponse, Responder},
+        Response,
+    },
 };
 
 impl From<Response> for ActixHttpResponse {

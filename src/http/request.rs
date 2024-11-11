@@ -4,7 +4,7 @@ use http::{request::Parts, HeaderMap, HeaderValue};
 
 use crate::http::body::Body;
 
-use super::response::IntoResponse;
+use super::response::into_response::IntoResponse;
 
 pub struct Request<T = Body>(pub http::Request<T>);
 

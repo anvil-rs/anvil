@@ -248,6 +248,7 @@ dependencies = [
  "http 1.1.0",
  "http-body",
  "http-body-util",
+ "mime",
  "pin-project-lite",
  "serde",
  "sync_wrapper 1.0.1",

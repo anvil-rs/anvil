@@ -7,6 +7,9 @@
 //! - The library provides the building blocks, not the solutions.
 //! - Rely on other's implementations.
 
+#[macro_use]
+pub(crate) mod macros;
+
 /// Backends for Anvil.
 pub mod adapters;
 

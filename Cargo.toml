@@ -30,6 +30,7 @@ http-body = "1.0.1"
 futures-util = "0.3.31"
 sync_wrapper = { version = "1.0.1", features = [ "futures"] }
 pin-project-lite = "0.2.14"
+mime = "0.3.17"
 
 [dev-dependencies]
 http-body-util = "0.1.2"

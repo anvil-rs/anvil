@@ -1,9 +1,4 @@
-use std::convert::Infallible;
-
-use crate::{
-    extractors::Extractor,
-    http::request::{FromRequest, Request},
-};
+use crate::http::request::Request;
 
 impl From<axum::extract::Request> for Request {
     fn from(value: axum::extract::Request) -> Self {

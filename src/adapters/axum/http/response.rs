@@ -1,6 +1,9 @@
 use axum::response::IntoResponse as AxumIntoResponse;
 
-use crate::http::response::{IntoResponse, Responder, Response};
+use crate::http::response::{
+    into_response::{IntoResponse, Responder},
+    Response,
+};
 
 impl From<axum::response::Response> for Response {
     fn from(value: axum::response::Response) -> Self {
