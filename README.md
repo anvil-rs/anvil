@@ -1,4 +1,4 @@
-# Design Document for Modular Code Generation Library
+# Design Document for Anvil
 
 ## Overview
 This document outlines the design of a modular code generation library that facilitates creating, managing, and extending code generation modules. The library is designed to ensure flexibility, reusability, and scalability while addressing common issues in modular code generation workflows, such as dependencies, configuration, and extensibility.
