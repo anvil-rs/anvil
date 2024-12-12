@@ -1,4 +1,116 @@
-# Anvil 
+# Design Document for Modular Code Generation Library
+
+## Overview
+This document outlines the design of a modular code generation library that facilitates creating, managing, and extending code generation modules. The library is designed to ensure flexibility, reusability, and scalability while addressing common issues in modular code generation workflows, such as dependencies, configuration, and extensibility.
+
+## Goals
+1. **Modularity**: Provide a structure where modules can be created, extended, and reused without tight coupling.
+2. **Extensibility**: Allow users to define their custom behaviors and integrate new modules with minimal effort.
+3. **Configurability**: Ensure that the system can be configured programmatically, providing users with complete control over their generated code structure and dependencies.
+4. **Scalability**: Support projects of varying sizes and complexities without sacrificing performance or usability.
+5. **Reproducibility**: Maintain consistent generation outputs across environments to enhance reliability and reduce errors.
+6. **Minimal Coupling**: Avoid creating a central module that ties everything together, ensuring that modules remain independent.
+
+## Core Concepts
+### 1. **Module System**
+Modules are the building blocks of this library. Each module encapsulates specific functionality and defines how code is generated for a particular domain or feature. Modules may:
+- Define templates for generating code.
+- Implement behaviors to modify or extend generated outputs.
+- Provide hooks or APIs for external configuration.
+
+### 2. **Dependency Management**
+Modules can declare dependencies on other modules. These dependencies ensure that the necessary modules are loaded and configured before a dependent module executes its logic. The library will:
+- Resolve dependencies at runtime.
+- Prevent circular dependencies.
+- Validate that dependent modules are correctly configured.
+
+### 3. **Configuration**
+The library allows programmatic configuration of modules and their behaviors. Users can pass in:
+- Paths and file structures for generated outputs.
+- Custom options or functions to adjust module behaviors.
+- Routing tables to specify where generated components should be placed.
+
+Example:
+```rust
+let modules = [
+    SomeModule(SomeConfig {
+        enable_feature: true,
+        output_path: "src/some_module/",
+    }),
+    AnotherModule(AnotherConfig {}),
+];
+```
+
+### 4. **Generation Workflow**
+The generation workflow follows these steps:
+1. **Initialization**: Load and configure all required modules.
+2. **Dependency Resolution**: Ensure dependencies are resolved and configured correctly.
+3. **Execution**: Invoke each module’s generation logic.
+4. **Validation**: Verify that generated outputs are consistent and non-conflicting.
+
+### 5. **Validation and Conflict Resolution**
+To prevent conflicts, the library:
+- Validates that no two modules generate overlapping files.
+- Provides clear error messages when conflicts occur.
+- Allows users to define conflict resolution strategies, such as overwriting, skipping, or merging.
+
+### 6. **Template and Routing System**
+Templates define how code is generated. The routing system determines where the generated code is placed. This decoupling ensures that templates remain reusable across different projects and contexts.
+
+Users can define routing tables to configure paths dynamically:
+```json
+{
+    "routes": {
+        "controllers": "src/controllers/",
+        "models": "src/models/",
+        "views": "src/views/"
+    }
+}
+```
+
+### 7. **CLI Support**
+The library provides robust CLI tools for integrating with build systems and automating code generation tasks. Each module exposes its CLI commands to:
+- Generate specific templates.
+- Validate configurations.
+- Perform dry runs to preview outputs.
+
+## Design Decisions
+1. **Separation of Concerns**:
+   - Modules handle generation logic.
+   - The core library manages configuration, dependencies, and execution.
+
+2. **Composable Configuration**:
+   - Modules expose options to allow granular control over their behavior.
+   - Users can create configurations dynamically at runtime.
+
+3. **Conflict Prevention**:
+   - Explicit validation ensures that generated outputs do not clash.
+   - Routing tables provide a centralized way to manage output locations.
+
+4. **Reproducibility**:
+   - Consistent generation outputs are ensured by locking module versions and configurations.
+
+## Use Cases
+### 1. **Simple Module Setup**
+A single module generates controllers and services for a project based on predefined templates.
+
+### 2. **Complex Multi-Module Project**
+Multiple modules work together to generate an application’s structure. Dependencies ensure that services are generated before controllers, and routing tables determine file placement.
+
+### 3. **Custom Module Integration**
+Users create custom modules to extend the library’s functionality, such as adding support for a new framework or language.
+
+## Future Enhancements
+- **Plugin System**: Support dynamic loading of modules as plugins.
+- **Template Repository**: Provide a library of reusable templates.
+- **UI Interface**: Develop a graphical interface for managing configurations and generating code.
+- **Version Control Integration**: Automate commits and track changes to generated code.
+
+## Conclusion
+This library aims to streamline code generation processes through modularity, configurability, and extensibility. By focusing on core principles such as reproducibility and conflict prevention, it provides a robust foundation for a wide range of development workflows.
+
+
+# DEPRECATED: Old Anvil design notes
 
 
 ## Ethos
