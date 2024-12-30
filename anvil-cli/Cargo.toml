@@ -2,6 +2,7 @@
 name = "anvil-cli"
 version = "0.1.0"
 edition = "2021"
+workspace = "../"
 
 [dependencies]
 askama = "0.12.1"
