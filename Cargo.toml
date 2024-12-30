@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "anvil",
+    "anvil-cli",
+    "anvil-derive",
+]
+
+resolver = "2"
+
+default-members = [
+    "anvil",
+    "anvil-cli",
+    "anvil-derive",
+]
