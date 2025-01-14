@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "anvil", 
+    "anvil", "anvil-askama", 
     "anvil-cli",
 ]
 

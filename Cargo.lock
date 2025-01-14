@@ -65,7 +65,6 @@ name = "anvil"
 version = "0.1.0"
 dependencies = [
  "askama",
- "heck",
  "regex",
  "thiserror",
 ]
@@ -75,9 +74,21 @@ name = "anvil-cli"
 version = "0.1.0"
 dependencies = [
  "anvil",
+ "anvil_askama",
  "askama",
  "clap",
  "heck",
+ "regex",
+]
+
+[[package]]
+name = "anvil_askama"
+version = "0.1.0"
+dependencies = [
+ "anvil",
+ "askama",
+ "heck",
+ "ref-cast",
  "regex",
 ]
 
@@ -282,6 +293,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e4dccaaaf89514f546c693ddc140f729f958c247918a13380cccc6078391acc"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "ref-cast"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ccf0a6f84d5f1d581da8b41b47ec8600871962f2a528115b542b362d4b744931"
+dependencies = [
+ "ref-cast-impl",
+]
+
+[[package]]
+name = "ref-cast-impl"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bcc303e793d3734489387d205e9b186fac9c6cfacedd98cbb2e8a5943595f3e6"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

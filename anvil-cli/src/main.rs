@@ -1,12 +1,13 @@
+use anvil::{either::either, forge, Append, Either, Forge, Generate};
+
+use anvil_askama::{
+    append::{append, AskamaAppendExt},
+    filters,
+    generate::{generate, AskamaGenerateExt},
+};
+
 use askama::Template;
 use clap::{Args, Parser, Subcommand};
-use heck::ToSnakeCase;
-
-use anvil::{append, either, filters, generate, render};
-use anvil::{either::Either, Anvil, Append, Generate};
-
-// Meta framewokr idea: ablke to pull in templates from dependencies if we want to change the way
-// things are generated.
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -47,20 +48,13 @@ fn main() {
         Commands::Generate(con) => match con {
             Gen::Controller(controller) => {
                 // these two may be equivelant:
-                render!(
-                    either!(append!(controller), generate!(controller)),
-                    "src/controllers/mod.rs"
+                forge(
+                    either(append(controller), generate(controller)),
+                    "src/controllers/mod.rs",
                 );
 
-                Either::new(Append::new(controller), Generate::new(controller))
-                    .render("src/controllers/mod.rs")
-                    .unwrap();
-
-                Generate::new(controller)
-                    .render(format!(
-                        "src/controller/{}.rs",
-                        controller.name.to_snake_case()
-                    ))
+                Either::new(Append::askama(controller), Generate::askama(controller))
+                    .forge("src/controllers/mod.rs")
                     .unwrap();
             }
         },

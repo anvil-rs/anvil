@@ -1,25 +1,24 @@
 use std::{io::Write, path::Path};
 
-use askama::Template;
 use regex::Regex;
 use thiserror::Error;
 
-use crate::Anvil;
+use crate::{Anvil, Forge};
 
-pub struct Inject<'a, T>
+pub struct Inject<'a, A>
 where
-    T: Template,
+    A: Anvil,
 {
-    template: &'a T,
+    template: &'a A,
     before: Option<Regex>,
     after: Option<Regex>,
 }
 
-impl<'a, T> Inject<'a, T>
+impl<'a, A> Inject<'a, A>
 where
-    T: Template,
+    A: Anvil,
 {
-    pub fn new(template: &'a T, before: Option<Regex>, after: Option<Regex>) -> Self {
+    pub fn new(template: &'a A, before: Option<Regex>, after: Option<Regex>) -> Self {
         Self {
             template,
             before,
@@ -32,15 +31,17 @@ where
 pub enum InjectError {
     #[error("file error {0}")]
     StdIo(#[from] std::io::Error),
+    #[error("template error")]
+    Template,
 }
 
-impl<T> Anvil for Inject<'_, T>
+impl<A> Forge for Inject<'_, A>
 where
-    T: Template,
+    A: Anvil,
 {
     type Error = InjectError;
 
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
         let file_contents = std::fs::read_to_string(path).map_err(InjectError::StdIo)?;
         let template = self.template.render().unwrap();
@@ -68,24 +69,6 @@ where
             .write_all(lines.join("\n").as_bytes())
             .map_err(InjectError::StdIo)
     }
-}
-
-// macro rule for inject, can have 0 or 2 regex additional arguments. but not necessary, sets as
-// None if not provided. The inject macro should take the before and after fields as named inputs,
-#[macro_export]
-macro_rules! inject {
-    ($template:expr) => {
-        Inject::new($template, None, None)
-    };
-    ($template:expr, before = $before:expr) => {
-        Inject::new($template Some($before), None)
-    };
-    ($template:expr, after = $after:expr) => {
-        Inject::new($template, None, Some($after))
-    };
-    ($template:expr, before = $before:expr, after = $after:expr) => {
-        Inject::new($template, Some($before), Some($after))
-    };
 }
 
 #[cfg(test)]

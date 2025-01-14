@@ -1,9 +1,11 @@
 [package]
-name = "anvil"
+name = "anvil_askama"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 askama = "0.12.1"
+heck = "0.5.0"
+anvil = { path = "../anvil" }
+ref-cast = "1.0.23"
 regex = "1.11.1"
-thiserror = "2.0.9"
