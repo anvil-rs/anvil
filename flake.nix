@@ -17,7 +17,7 @@
           src = ./.; 
         };
         devShell = with pkgs; mkShell {
-          buildInputs = [ cargo rustc pre-commit rustPackages.clippy rust-analyzer ];
+          buildInputs = [ cargo rustc pre-commit rustPackages.clippy rust-analyzer cargo-expand rustfmt ];
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
         };
       }

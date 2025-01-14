@@ -1,10 +1,12 @@
+use askama::Template;
 use clap::{Args, Parser, Subcommand};
 use heck::ToSnakeCase;
-use std::fs::File;
-use std::io::BufWriter;
-use askama::Template;
 
-mod filters;
+use anvil::{append, either, filters, generate, render};
+use anvil::{either::Either, Anvil, Append, Generate};
+
+// Meta framewokr idea: ablke to pull in templates from dependencies if we want to change the way
+// things are generated.
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -18,11 +20,11 @@ struct Cli {
 enum Commands {
     /// Generate
     #[command(subcommand)]
-    Generate(Generate),
+    Generate(Gen),
 }
 
 #[derive(Subcommand)]
-enum Generate {
+enum Gen {
     /// Controller
     Controller(Controller),
 }
@@ -30,66 +32,11 @@ enum Generate {
 #[derive(Args, Template)]
 #[template(path = "controller.rs", escape = "none")] // using the template in this path, relative
 struct Controller {
-    /// Name
     name: String,
 }
-
-
-#[derive(Args, Template)]
-#[template(path = "controller_mod.rs", escape = "none")] // using the template in this path, relative
-struct ControllerFrontMatter {
-    name: String,
-}
-
-
-fn generate<T, S>(template: &T, path: S) -> std::io::Result<()>
-where
-    T: Template,
-    S: AsRef<std::path::Path>,
-{
-    let path = path.as_ref();
-    let prefix = path.parent().unwrap();
-    std::fs::create_dir_all(prefix).unwrap();
-
-    // Check if file exists
-    if path.exists() {
-        return Err(std::io::Error::new(std::io::ErrorKind::AlreadyExists, "File already exists"));
-    }
-
-
-    let file = File::create(path).unwrap();
-    let mut buffer = BufWriter::new(file);
-
-    template.write_into(&mut buffer).unwrap();
-
-    Ok(())
-}
-
-fn append<T, S>(template: &T, path: S) -> std::io::Result<()>
-where
-    T: Template,
-    S: AsRef<std::path::Path>,
-{
-    let path = path.as_ref();
-    let prefix = path.parent().unwrap();
-    std::fs::create_dir_all(prefix).unwrap();
-
-    let file = std::fs::OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(path)
-        .unwrap();
-    
-    let mut buffer = BufWriter::new(file);
-
-    template.write_into(&mut buffer).unwrap();
-
-    Ok(())
-}
-
 
 // Generating things is a one-time operation.
-// 
+//
 // Therefore, we can also use this to "add" things to a system
 // We could, in theory, have a module that inits a totally new project.
 
@@ -98,21 +45,23 @@ fn main() {
 
     match &cli.command {
         Commands::Generate(con) => match con {
-            Generate::Controller(controller) => {
+            Gen::Controller(controller) => {
+                // these two may be equivelant:
+                render!(
+                    either!(append!(controller), generate!(controller)),
+                    "src/controllers/mod.rs"
+                );
 
-                match generate(controller, format!("src/controllers/{}.rs", controller.name.to_snake_case())) {
-                    Ok(_) => println!("File generated successfully"),
-                    Err(e) => println!("Error: {}", e),
-                }
+                Either::new(Append::new(controller), Generate::new(controller))
+                    .render("src/controllers/mod.rs")
+                    .unwrap();
 
-                let frontmatter = ControllerFrontMatter {
-                    name: controller.name.clone(),
-                };
-
-                match append(&frontmatter, "src/controllers/mod.rs") {
-                    Ok(_) => println!("File appended successfully"),
-                    Err(e) => println!("Error: {}", e),
-                }
+                Generate::new(controller)
+                    .render(format!(
+                        "src/controller/{}.rs",
+                        controller.name.to_snake_case()
+                    ))
+                    .unwrap();
             }
         },
     }
