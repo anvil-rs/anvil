@@ -1,12 +1,12 @@
 [workspace]
 members = [
-    "anvil", "anvil-askama", 
-    "anvil-cli",
+    "anvil", 
+    "anvil-askama", "anvil-tera",
+    "examples"
 ]
 
 resolver = "2"
 
 default-members = [
     "anvil",
-    "anvil-cli",
 ]
