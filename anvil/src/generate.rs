@@ -4,8 +4,8 @@ use thiserror::Error;
 
 use crate::{Anvil, Forge};
 
-pub struct Generate<'a, A: Anvil> {
-    template: &'a A,
+pub struct Generate<A: Anvil> {
+    template: A,
 }
 
 #[derive(Error, Debug)]
@@ -16,7 +16,7 @@ pub enum GenerateError {
     Template,
 }
 
-impl<A: Anvil> Forge for Generate<'_, A> {
+impl<A: Anvil> Forge for Generate< A> {
     type Error = GenerateError;
 
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
@@ -37,8 +37,8 @@ impl<A: Anvil> Forge for Generate<'_, A> {
     }
 }
 
-impl<'a, T: Anvil> Generate<'a, T> {
-    pub fn new(template: &'a T) -> Self {
+impl<T: Anvil> Generate<T> {
+    pub fn new(template: T) -> Self {
         Self { template }
     }
 }

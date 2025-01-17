@@ -30,7 +30,7 @@ enum Gen {
     Controller(Controller),
 }
 
-#[derive(Args, Template)]
+#[derive(Args, Template, Clone)]
 #[template(path = "controller.rs", escape = "none")] // using the template in this path, relative
 struct Controller {
     name: String,
@@ -48,12 +48,12 @@ fn main() {
         Commands::Generate(con) => match con {
             Gen::Controller(controller) => {
                 // these two may be equivelant:
-                forge(
-                    either(append(controller), generate(controller)),
-                    "src/controllers/mod.rs",
-                );
+                // forge(
+                //     either(append(controller), generate(controller)),
+                //     "src/controllers/mod.rs",
+                // );
 
-                Either::new(Append::askama(controller), Generate::askama(controller))
+                Either::new(Append::askama(controller.clone()), Generate::askama(controller.clone()))
                     .forge("src/controllers/mod.rs")
                     .unwrap();
             }

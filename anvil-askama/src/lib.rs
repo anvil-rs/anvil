@@ -5,10 +5,7 @@ pub mod inject;
 
 use anvil::Anvil;
 use askama::Template;
-use ref_cast::RefCast;
 
-#[derive(RefCast)]
-#[repr(transparent)]
 pub struct Askama<T: Template>(T);
 
 impl<T: Template> Anvil for Askama<T> {

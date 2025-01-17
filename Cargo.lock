@@ -102,6 +102,7 @@ version = "0.1.0"
 dependencies = [
  "anvil",
  "heck",
+ "once_cell",
  "regex",
  "serde",
  "tera",

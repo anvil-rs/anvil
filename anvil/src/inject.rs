@@ -5,20 +5,20 @@ use thiserror::Error;
 
 use crate::{Anvil, Forge};
 
-pub struct Inject<'a, A>
+pub struct Inject<A>
 where
     A: Anvil,
 {
-    template: &'a A,
+    template: A,
     before: Option<Regex>,
     after: Option<Regex>,
 }
 
-impl<'a, A> Inject<'a, A>
+impl<A> Inject<A>
 where
     A: Anvil,
 {
-    pub fn new(template: &'a A, before: Option<Regex>, after: Option<Regex>) -> Self {
+    pub fn new(template: A, before: Option<Regex>, after: Option<Regex>) -> Self {
         Self {
             template,
             before,
@@ -35,7 +35,7 @@ pub enum InjectError {
     Template,
 }
 
-impl<A> Forge for Inject<'_, A>
+impl<A> Forge for Inject<A>
 where
     A: Anvil,
 {

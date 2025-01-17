@@ -12,11 +12,11 @@ pub enum AppendError {
     Template,
 }
 
-pub struct Append<'a, A: Anvil> {
-    template: &'a A,
+pub struct Append<A: Anvil> {
+    template: A,
 }
 
-impl<A: Anvil> Forge for Append<'_, A> {
+impl<A: Anvil> Forge for Append<A> {
     type Error = AppendError;
 
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
@@ -36,8 +36,8 @@ impl<A: Anvil> Forge for Append<'_, A> {
     }
 }
 
-impl<'a, T: Anvil> Append<'a, T> {
-    pub fn new(template: &'a T) -> Self {
+impl<T: Anvil> Append<T> {
+    pub fn new(template: T) -> Self {
         Self { template }
     }
 }

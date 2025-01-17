@@ -1,19 +1,18 @@
 use anvil::{Forge, Generate};
 use askama::Template;
-use ref_cast::RefCast;
 
 use crate::Askama;
 
-pub trait AskamaGenerateExt<'a, T: Template>: Forge {
-    fn askama(template: &'a T) -> Self;
+pub trait AskamaGenerateExt<T: Template>: Forge {
+    fn askama(template: T) -> Self;
 }
 
-impl<'a, T: Template> AskamaGenerateExt<'a, T> for Generate<'a, Askama<T>> {
-    fn askama(template: &'a T) -> Self {
-        Self::new(Askama::ref_cast(template))
+impl<T: Template> AskamaGenerateExt<T> for Generate<Askama<T>> {
+    fn askama(template: T) -> Self {
+        Self::new(Askama(template))
     }
 }
 
-pub fn generate<T: Template>(template: &T) -> Generate<Askama<T>> {
+pub fn generate<T: Template>(template: T) -> Generate<Askama<T>> {
     Generate::askama(template)
 }

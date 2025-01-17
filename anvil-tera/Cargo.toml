@@ -8,4 +8,5 @@ heck = "0.5.0"
 anvil = { path = "../anvil" }
 regex = "1.11.1"
 tera = "1.20.0"
-serde = "1.0.217"
+serde = { version = "1.0.217", features = [ "derive" ] } 
+once_cell = "1.20.2"
