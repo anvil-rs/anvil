@@ -48,14 +48,17 @@ fn main() {
         Commands::Generate(con) => match con {
             Gen::Controller(controller) => {
                 // these two may be equivelant:
-                // forge(
-                //     either(append(controller), generate(controller)),
-                //     "src/controllers/mod.rs",
-                // );
+                forge(
+                    either(append(controller), generate(controller)),
+                    "src/controllers/mod.rs",
+                );
 
-                Either::new(Append::askama(controller.clone()), Generate::askama(controller.clone()))
-                    .forge("src/controllers/mod.rs")
-                    .unwrap();
+                Either::new(
+                    Append::askama(controller.clone()),
+                    Generate::askama(controller.clone()),
+                )
+                .forge("src/controllers/mod.rs")
+                .unwrap();
             }
         },
     }

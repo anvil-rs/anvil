@@ -13,6 +13,6 @@ impl<T: Template> AskamaAppendExt<T> for Append<Askama<T>> {
     }
 }
 
-pub fn append<T: Template>(template: T) -> Append<Askama<T>> {
-    Append::askama(template)
+pub fn append<T: Template + Clone>(template: &T) -> Append<Askama<T>> {
+    Append::askama(template.clone())
 }

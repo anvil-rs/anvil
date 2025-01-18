@@ -15,3 +15,28 @@ impl<T: Template> Anvil for Askama<T> {
         self.0.write_into(writer)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use askama::Template;
+
+    #[derive(Template)]
+    #[template(path = "hello.txt")]
+    struct HelloTemplate {
+        name: String,
+    }
+
+    #[test]
+    fn can_render_askama_template() {
+        let template = HelloTemplate {
+            name: "World".to_string(),
+        };
+
+        let anvil = Askama(template);
+
+        let mut buffer = Vec::new();
+        anvil.render_into(&mut buffer).unwrap();
+        assert_eq!(String::from_utf8(buffer).unwrap(), "Hello, World!");
+    }
+}

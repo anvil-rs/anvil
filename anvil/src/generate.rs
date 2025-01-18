@@ -16,7 +16,7 @@ pub enum GenerateError {
     Template,
 }
 
-impl<A: Anvil> Forge for Generate< A> {
+impl<A: Anvil> Forge for Generate<A> {
     type Error = GenerateError;
 
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {

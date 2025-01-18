@@ -1,38 +1,32 @@
-use anvil::{Forge, Generate};
-use tera::Tera;
+use anvil::{Append, Forge};
 use serde::Serialize;
-use crate::AnvilTera;
+use std::borrow::Cow;
+use tera::Tera;
 
-// pub trait AnvilTeraGenerateExt<'a, T: Serialize>: Forge {
-//     fn tera(template: &'a T) -> Self;
-// }
-//
-// impl<'a, T: Serialize> AnvilTeraGenerateExt<'a, T> for Generate<'a, AnvilTera<T>> {
-//     fn tera(template: &'a T, tera: &'a Tera, template: &'static str) -> Self {
-//         Self::new(AnvilTera {
-//             inner: template,
-//             tera: tera,
-//             template: template,
-//         })
-//     }
-// }
-//
-// #[cfg(test)]
-// mod test {
-//
-//     use super::*;
-//     use std::collections::HashMap;
-//
-//     #[test]
-//     fn test_tera() {
-//         let mut tera = Tera::default();
-//         tera.add_raw_template("hello", "Hello, {{ name }}!").unwrap();
-//         let mut context = HashMap::new();
-//         context.insert("name", "world");
-//         let forge = Generate::tera(&context, &tera, "hello");
-//         let mut buffer = Vec::new();
-//         forge.render_into(&mut buffer).unwrap();
-//         assert_eq!(String::from_utf8(buffer).unwrap(), "Hello, world!");
-//     }
-//
-// }
+use crate::TeraTemplate;
+
+pub trait TeraAppendExt<T: Serialize>: Forge {
+    fn tera(
+        engine: Tera,
+        template_path: impl Into<Cow<'static, str>>,
+        context: T,
+    ) -> Append<TeraTemplate<T>>;
+}
+
+impl<T: Serialize> TeraAppendExt<T> for Append<TeraTemplate<T>> {
+    fn tera(
+        engine: Tera,
+        template_path: impl Into<Cow<'static, str>>,
+        context: T,
+    ) -> Append<TeraTemplate<T>> {
+        Append::new(TeraTemplate::new(engine, template_path, context))
+    }
+}
+
+pub fn append<T: Serialize>(
+    engine: Tera,
+    template_path: impl Into<Cow<'static, str>>,
+    context: T,
+) -> Append<TeraTemplate<T>> {
+    Append::tera(engine, template_path, context)
+}

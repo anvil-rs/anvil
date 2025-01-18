@@ -13,6 +13,6 @@ impl<T: Template> AskamaGenerateExt<T> for Generate<Askama<T>> {
     }
 }
 
-pub fn generate<T: Template>(template: T) -> Generate<Askama<T>> {
-    Generate::askama(template)
+pub fn generate<T: Template + Clone>(template: &T) -> Generate<Askama<T>> {
+    Generate::askama(template.clone())
 }
