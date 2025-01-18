@@ -32,7 +32,7 @@ This document outlines the design of a modular code generation library that faci
    - It should ONLY be dependent for it's own generation units.
 
 2. **Composable Configuration**:
-  - A module provides us with the smallest units of generation possible, in order for it to be composable.
+   - A module provides us with the smallest units of generation possible, in order for it to be composable.
 
 3. **Reproducibility**:
    - Consistent generation outputs are ensured by locking module versions and configurations.
@@ -43,11 +43,11 @@ This document outlines the design of a modular code generation library that faci
 ### Additional Ideas
 
 1. Migration based code generation.
-  - Generating code based on the changes that a code generation block will make.
-  - This will allow us to roll back the changes if needed.
-  - Could be quite easily done with a diffing tool.
+   - Generating code based on the changes that a code generation block will make.
+   - This will allow us to roll back the changes if needed.
+   - Could be quite easily done with a diffing tool.
 
 2. Move away From just code gen to general "Actions".
-  - Actions could be anything from code generation to running tests.
-  - This will allow us to create a more general purpose tool.
-  - Might be worth splitting this out into it's own crate.
+   - Actions could be anything from code generation to running tests.
+   - This will allow us to create a more general purpose tool.
+   - Might be worth splitting this out into it's own crate.
