@@ -42,6 +42,8 @@ This document outlines the design of a modular code generation library that faci
 
 ### Additional Ideas
 
+Ordered by priority:
+
 1. Migration based code generation.
    - Generating code based on the changes that a code generation block will make.
    - This will allow us to roll back the changes if needed.
@@ -51,3 +53,10 @@ This document outlines the design of a modular code generation library that faci
    - Actions could be anything from code generation to running tests.
    - This will allow us to create a more general purpose tool.
    - Might be worth splitting this out into it's own crate.
+
+3. More fluent definitions for code gen types (Generate, Inject, Append etc.)
+   - Could define these structs as actions on a file.
+       - Generate is an generation action you can only have a single generation action on a file.
+       - Inject and append are mutation actions, you can have multiple mutation actions on a file.
+       - Remove is it's own action.
+       - This could allow us to have a more fluent API for defining code generation actions.
