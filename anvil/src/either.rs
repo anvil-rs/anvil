@@ -20,10 +20,8 @@ where
     R: Anvil,
 {
     type Error = R::Error;
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
-        self.left
-            .render(&into)
-            .or_else(|_| self.right.render(&into))
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+        self.left.forge(&into).or_else(|_| self.right.forge(&into))
     }
 }
 

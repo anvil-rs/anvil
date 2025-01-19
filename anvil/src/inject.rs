@@ -6,6 +6,10 @@ use thiserror::Error;
 
 use crate::Anvil;
 
+/// A struct that can be used to inject a Template into a file.
+/// The file will NOT be created if it does not exist.
+/// The Template will be injected before or after a given line.
+/// If the line is not found, the Template will not be injected.
 pub struct Inject<'a, T>
 where
     T: Template,
@@ -40,7 +44,7 @@ where
 {
     type Error = InjectError;
 
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
         let file_contents = std::fs::read_to_string(path).map_err(InjectError::StdIo)?;
         let template = self.template.render().unwrap();
@@ -72,7 +76,6 @@ where
 
 // macro rule for inject, can have 0 or 2 regex additional arguments. but not necessary, sets as
 // None if not provided. The inject macro should take the before and after fields as named inputs,
-
 
 pub fn inject<T: Template>(template: &T, before: Regex, after: Regex) -> Inject<T> {
     Inject::new(template, Some(before), Some(after))

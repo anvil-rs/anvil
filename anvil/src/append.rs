@@ -11,6 +11,8 @@ pub enum AppendError {
     StdIo(#[from] std::io::Error),
 }
 
+/// A struct that can be used to append a Template to a file.
+/// The file will NOT be created if it does not exist.
 pub struct Append<'a, T>
 where
     T: Template,
@@ -24,15 +26,15 @@ where
 {
     type Error = AppendError;
 
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
         let file = std::fs::OpenOptions::new()
-            .create(true)
             .append(true)
             .open(path)
             .map_err(AppendError::StdIo)?;
 
         let mut writer = BufWriter::new(file);
+
         self.template
             .write_into(&mut writer)
             .map_err(AppendError::StdIo)?;

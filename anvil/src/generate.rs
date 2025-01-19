@@ -5,6 +5,9 @@ use thiserror::Error;
 
 use crate::Anvil;
 
+/// A struct that can be used to generate a file from a Template.
+/// The file will be created if it does not exist.
+/// If the file already exists, it will be overwritten.
 pub struct Generate<'a, T>
 where
     T: Template,
@@ -24,7 +27,7 @@ where
 {
     type Error = GenerateError;
 
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
 
         let prefix = path.parent().expect("no parent directory");

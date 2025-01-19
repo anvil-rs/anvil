@@ -11,13 +11,13 @@ use std::{error::Error, path::Path};
 /// The error is the error that the rendering engine can produce.
 pub trait Anvil {
     type Error: Error;
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;
 }
 
 impl<T: Template> Anvil for T {
     type Error = askama::Error;
 
-    fn render(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
+    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
         let prefix = path.parent().expect("no parent directory");
         std::fs::create_dir_all(prefix).unwrap();
@@ -28,8 +28,9 @@ impl<T: Template> Anvil for T {
     }
 }
 
+/// Render an Anvil into a file.
 pub fn render(anvil: impl Anvil, into: impl AsRef<Path>) {
-    anvil.render(into).unwrap();
+    anvil.forge(into).unwrap();
 }
 
 pub use append::Append;
