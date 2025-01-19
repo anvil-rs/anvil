@@ -3,7 +3,6 @@ pub mod either;
 pub mod filters;
 pub mod generate;
 pub mod inject;
-pub mod render;
 
 use std::{error::Error, path::Path};
 
@@ -27,6 +26,10 @@ impl<T: Template> Anvil for T {
         self.write_into(&mut writer).unwrap();
         Ok(())
     }
+}
+
+pub fn render(anvil: impl Anvil, into: impl AsRef<Path>) {
+    anvil.render(into).unwrap();
 }
 
 pub use append::Append;

@@ -50,9 +50,6 @@ where
     }
 }
 
-#[macro_export]
-macro_rules! append {
-    ($template:expr) => {
-        Append::new($template)
-    };
+pub fn append<T: Template>(template: &T) -> Append<T> {
+    Append::new(template)
 }

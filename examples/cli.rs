@@ -1,12 +1,7 @@
+use anvil::{append::append, either::either, filters, generate::generate, render, Anvil, Append, Either, Generate};
+
 use askama::Template;
 use clap::{Args, Parser, Subcommand};
-use heck::ToSnakeCase;
-
-use anvil::{append, either, filters, generate, render};
-use anvil::{either::Either, Anvil, Append, Generate};
-
-// Meta framewokr idea: ablke to pull in templates from dependencies if we want to change the way
-// things are generated.
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -29,7 +24,7 @@ enum Gen {
     Controller(Controller),
 }
 
-#[derive(Args, Template)]
+#[derive(Args, Template, Clone)]
 #[template(path = "controller.rs", escape = "none")] // using the template in this path, relative
 struct Controller {
     name: String,
@@ -46,22 +41,25 @@ fn main() {
     match &cli.command {
         Commands::Generate(con) => match con {
             Gen::Controller(controller) => {
-                // these two may be equivelant:
-                render!(
-                    either!(append!(controller), generate!(controller)),
-                    "src/controllers/mod.rs"
+
+                // these two are equivelant.
+
+                render(
+                    either(append(controller), generate(controller)),
+                    "src/controllers/mod.rs",
                 );
 
-                Either::new(Append::new(controller), Generate::new(controller))
-                    .render("src/controllers/mod.rs")
-                    .unwrap();
+                Either::new(
+                    Append::new(controller),
+                    Generate::new(controller),
+                )
+                .render("src/controllers/mod.rs")
+                .unwrap();
 
-                Generate::new(controller)
-                    .render(format!(
-                        "src/controller/{}.rs",
-                        controller.name.to_snake_case()
-                    ))
-                    .unwrap();
+                // would it be worth adding a chainable API to this?
+                // so you could do:
+                //
+
             }
         },
     }

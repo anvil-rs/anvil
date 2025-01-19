@@ -71,17 +71,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anvil-cli"
-version = "0.1.0"
-dependencies = [
- "anvil",
- "askama",
- "clap",
- "heck",
- "regex",
-]
-
-[[package]]
 name = "askama"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -185,6 +174,17 @@ name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
+
+[[package]]
+name = "examples"
+version = "0.0.0"
+dependencies = [
+ "anvil",
+ "askama",
+ "clap",
+ "heck",
+ "regex",
+]
 
 [[package]]
 name = "heck"

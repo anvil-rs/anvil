@@ -72,20 +72,18 @@ where
 
 // macro rule for inject, can have 0 or 2 regex additional arguments. but not necessary, sets as
 // None if not provided. The inject macro should take the before and after fields as named inputs,
-#[macro_export]
-macro_rules! inject {
-    ($template:expr) => {
-        Inject::new($template, None, None)
-    };
-    ($template:expr, before = $before:expr) => {
-        Inject::new($template Some($before), None)
-    };
-    ($template:expr, after = $after:expr) => {
-        Inject::new($template, None, Some($after))
-    };
-    ($template:expr, before = $before:expr, after = $after:expr) => {
-        Inject::new($template, Some($before), Some($after))
-    };
+
+
+pub fn inject<T: Template>(template: &T, before: Regex, after: Regex) -> Inject<T> {
+    Inject::new(template, Some(before), Some(after))
+}
+
+pub fn inject_before<T: Template>(template: &T, before: Regex) -> Inject<T> {
+    Inject::new(template, Some(before), None)
+}
+
+pub fn inject_after<T: Template>(template: &T, after: Regex) -> Inject<T> {
+    Inject::new(template, None, Some(after))
 }
 
 #[cfg(test)]

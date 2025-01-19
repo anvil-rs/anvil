@@ -5,4 +5,3 @@ pub fn routes() -> Routes {
         .prefix("{{name|snakecase}}")
         .get("/", index)
 }
-

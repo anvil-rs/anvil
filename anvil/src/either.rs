@@ -37,9 +37,6 @@ where
     }
 }
 
-#[macro_export]
-macro_rules! either {
-    ($left:expr, $right:expr) => {
-        Either::new($left, $right)
-    };
+pub fn either<L: Anvil, R: Anvil>(left: L, right: R) -> Either<L, R> {
+    Either::new(left, right)
 }

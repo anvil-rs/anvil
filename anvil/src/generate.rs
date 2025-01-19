@@ -48,9 +48,6 @@ impl<'a, T: Template> Generate<'a, T> {
     }
 }
 
-#[macro_export]
-macro_rules! generate {
-    ($template:expr) => {
-        Generate::new($template)
-    };
+pub fn generate<T: Template>(template: &T) -> Generate<T> {
+    Generate::new(template)
 }

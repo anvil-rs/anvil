@@ -1,12 +1,17 @@
 [package]
-name = "anvil-cli"
-version = "0.1.0"
+name = "examples"
+version = "0.0.0"
+publish = false
 edition = "2021"
-workspace = "../"
+license = "MIT"
 
-[dependencies]
+[dev-dependencies]
 askama = "0.12.1"
 clap = { version = "4.5.23", features = ["derive"] }
 heck = "0.5.0"
 regex = "1.11.1"
 anvil = { path = "../anvil" }
+
+[[example]]
+name = "cli"
+path = "cli.rs"
