@@ -51,6 +51,12 @@ Ordered by priority:
    - Currently we are just using the directory that the CLI is run in.
    - Whilst this is fine for most cases, it would be nice to have a more robust way of detecting the project root.
 
+3. ~~Move to a purely "drag and drop" approach to templates. Have a standalone CLI that is able to read from a static `templates` directory that is located in the project root.~~
+   - Then use file-based routing to route the files properly.
+   - Would most likely have to move away from using askama, and move to something like mini-jinja
+   - May also be good to split this into a separate lib
+   - Removes the concept of being able to append or remove. Unless we have some gross frontmatter in the templates.
+
 2. Migration based code generation.
    - Generating code based on the changes that a code generation block will make.
    - This will allow us to roll back the changes if needed.
@@ -67,3 +73,4 @@ Ordered by priority:
        - Inject and append are mutation actions, you can have multiple mutation actions on a file.
        - Remove is it's own action.
        - This could allow us to have a more fluent API for defining code generation actions.
+       - With these definitions of generation and mutation types, and removal types, it should be pretty easy to make some nice optimisations.
