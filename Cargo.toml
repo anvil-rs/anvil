@@ -1,11 +1,6 @@
 [workspace]
+resolver = "2"
 members = [
     "anvil",
     "examples"
-]
-
-resolver = "2"
-
-default-members = [
-    "anvil",
 ]
