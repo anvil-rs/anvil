@@ -1,7 +1,49 @@
+#![doc(html_logo_url = "")]
+//! Anvil is a modular templating system for creating user-defined scaffolding systems
+//!
+//! # Ethos
+//!
+//! - Configuration is code.
+//! - Compile time errors are better than runtime errors.
+//! - The library provides the building blocks, not the solutions.
+//!
+//! # Inspiration and Credits
+//!
+//! - [Laravel Artisan](https://laravel.com/docs/11.x/artisan)
+//! - [Rails Generators](https://guides.rubyonrails.org/generators.html)
+//! - [Loco.rs](https://loco.rs/docs/getting-started/tour/#adding-a-crud-api)
+//! - [Cargo Generate](https://github.com/cargo-generate/cargo-generate)
+//! - [Cookiecutter actix simple clean architecture](https://github.com/microsoft/cookiecutter-rust-actix-clean-architecture)
+//!
+//! # Example
+//! ```ignore
+//! use anvil::*;
+//! use askama::Template;
+//! use regex::Regex;
+//!
+//! #[derive(Template)]
+//! #[template(source="controller.rs", ext="txt")]
+//! struct ExampleTemplate;
+//!
+//! let controller = &ExampleTemplate;
+//! either(append(controller), generate(controller))
+//!     .forge("src/controllers/mod.rs")
+//!     .unwrap();
+//! ```
+
+/// Appending content to a file.
 pub mod append;
+
+/// Rendering either of two templates. If the first fails, the second is rendered.
 pub mod either;
+
+/// Additional askama filters.
 pub mod filters;
+
+/// Creating a file from a template.
 pub mod generate;
+
+/// Injecting content into a file.
 pub mod inject;
 
 use std::{error::Error, path::Path};
@@ -14,27 +56,8 @@ pub trait Anvil {
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;
 }
 
-impl<T: Template> Anvil for T {
-    type Error = askama::Error;
-
-    fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
-        let path = into.as_ref();
-        let prefix = path.parent().expect("no parent directory");
-        std::fs::create_dir_all(prefix).unwrap();
-        let file = std::fs::File::create(path).unwrap();
-        let mut writer = std::io::BufWriter::new(file);
-        self.write_into(&mut writer).unwrap();
-        Ok(())
-    }
-}
-
-/// Render an Anvil into a file.
-pub fn render(anvil: impl Anvil, into: impl AsRef<Path>) {
-    anvil.forge(into).unwrap();
-}
-
-pub use append::Append;
-use askama::Template;
-pub use either::Either;
-pub use generate::Generate;
-pub use inject::Inject;
+// A scaffold is a collection of generation steps.
+// for a large scaffold type, we generally want these to be defined by the user (or the template)
+// and then we can just run them in order.
+// We need to define a construct that runs something in order?
+// I guess a function works to some extent.

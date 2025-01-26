@@ -77,59 +77,102 @@ where
 // macro rule for inject, can have 0 or 2 regex additional arguments. but not necessary, sets as
 // None if not provided. The inject macro should take the before and after fields as named inputs,
 
+#[inline]
 pub fn inject<T: Template>(template: &T, before: Regex, after: Regex) -> Inject<T> {
     Inject::new(template, Some(before), Some(after))
 }
 
+#[inline]
 pub fn inject_before<T: Template>(template: &T, before: Regex) -> Inject<T> {
     Inject::new(template, Some(before), None)
 }
 
+#[inline]
 pub fn inject_after<T: Template>(template: &T, after: Regex) -> Inject<T> {
     Inject::new(template, None, Some(after))
 }
 
 #[cfg(test)]
 mod test {
-    // use super::*;
-    //
-    // #[derive(Template)]
-    // #[template(path = "tests/test.html")]
-    // struct TestTemplate;
-    //
-    // #[test]
-    // fn test_inject() {
-    //     let inject = inject!(&TestTemplate, "tests/inject.html");
-    // }
-    //
-    // #[test]
-    // fn test_inject_before() {
-    //     let inject = inject!(
-    //         &TestTemplate,
-    //         "tests/inject.html",
-    //         before = Regex::new(r"<!DOCTYPE html>").unwrap()
-    //     );
-    // }
-    //
-    // #[test]
-    // fn test_inject_after() {
-    //     let inject = inject!(
-    //         &TestTemplate,
-    //         "tests/inject.html",
-    //         after = Regex::new(r"<!DOCTYPE html>").unwrap()
-    //     );
-    // }
-    //
-    // #[test]
-    // fn test_inject_before_after() {
-    //     let inject = inject!(
-    //         &TestTemplate,
-    //         "tests/inject.html",
-    //         before = Regex::new(r"<!DOCTYPE html>").unwrap(),
-    //         after = Regex::new(r"<html>").unwrap()
-    //     );
-    // }
-}
 
-// manually implement Template for inject?
-// Then we don't need a custom trait.
+    use super::*;
+    use std::fs::File;
+    use std::io::Write;
+    use tempfile::tempdir;
+
+    #[derive(Template)]
+    #[template(source = "Inject content.", ext = "txt")]
+    struct TestTemplate;
+
+    #[test]
+    fn it_fails_if_file_does_not_exist() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("my-temporary-note.txt");
+        let result = inject(
+            &TestTemplate,
+            Regex::new("Initial content.").unwrap(),
+            Regex::new("Initial content.").unwrap(),
+        )
+        .forge(&file_path);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn it_injects_before_line() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("my-temporary-note.txt");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "Initial content.").unwrap();
+        let result =
+            inject_before(&TestTemplate, Regex::new("Initial content.").unwrap()).forge(&file_path);
+        assert!(result.is_ok());
+        let content = std::fs::read_to_string(&file_path).unwrap();
+        assert_eq!(content, "Inject content.\nInitial content.");
+    }
+
+    #[test]
+    fn it_injects_after_line() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("my-temporary-note.txt");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "Initial content.").unwrap();
+        let result =
+            inject_after(&TestTemplate, Regex::new("Initial content.").unwrap()).forge(&file_path);
+        assert!(result.is_ok());
+        let content = std::fs::read_to_string(&file_path).unwrap();
+        assert_eq!(content, "Initial content.\nInject content.");
+    }
+
+    #[test]
+    fn it_does_not_inject_if_match_not_found() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("my-temporary-note.txt");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "Initial content.").unwrap();
+        let result = inject_after(&TestTemplate, Regex::new("Non-existent content.").unwrap())
+            .forge(&file_path);
+        assert!(result.is_ok());
+        let content = std::fs::read_to_string(&file_path).unwrap();
+        assert_eq!(content, "Initial content.");
+    }
+
+    #[test]
+    fn it_injects_before_and_after_line() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("my-temporary-note.txt");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "Initial content.").unwrap();
+        let result = inject(
+            &TestTemplate,
+            Regex::new("Initial content.").unwrap(),
+            Regex::new("Initial content.").unwrap(),
+        )
+        .forge(&file_path);
+        assert!(result.is_ok());
+        let content = std::fs::read_to_string(&file_path).unwrap();
+        assert_eq!(
+            content,
+            "Inject content.\nInitial content.\nInject content."
+        );
+    }
+}

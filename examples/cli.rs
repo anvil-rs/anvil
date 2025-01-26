@@ -1,7 +1,4 @@
-use anvil::{
-    append::append, either::either, filters, generate::generate, render, Anvil, Append, Either,
-    Generate,
-};
+use anvil::{append::*, either::*, filters, generate::*, Anvil};
 
 use askama::Template;
 use clap::{Args, Parser, Subcommand};
@@ -46,18 +43,13 @@ fn main() {
             Gen::Controller(controller) => {
                 // these two are equivelant.
 
-                render(
-                    either(append(controller), generate(controller)),
-                    "src/controllers/mod.rs",
-                );
+                either(append(controller), generate(controller))
+                    .forge("src/controllers/mod.rs")
+                    .unwrap();
 
                 Either::new(Append::new(controller), Generate::new(controller))
                     .forge("src/controllers/mod.rs")
                     .unwrap();
-
-                // would it be worth adding a chainable API to this?
-                // so you could do:
-                //
             }
         },
     }

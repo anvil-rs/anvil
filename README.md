@@ -1,21 +1,16 @@
 # Ethos
 
 - Configuration in code.
-- User level abstraction should be minimal. It is the responsibility of the framework to handle the complexity.
-- Each component should be interchangeable with __no__ code change.
+- Interchangeable components.
 - The library provides the building blocks, not the solutions.
-- Rely on other's implementations.
 
 ## Inspiration:
 
 - [Laravel Artisan](https://laravel.com/docs/11.x/artisan)
 - [Rails Generators](https://guides.rubyonrails.org/generators.html)
-- [loco.rs scaffolds](https://loco.rs/docs/getting-started/tour/#adding-a-crud-api)
-- [Master hexagonal architecture in Rust](https://www.howtocodeit.com/articles/master-hexagonal-architecture-rust)
-  - "axum becomes an implementation detail, concealed by our own HTTP package."
-  - "Business logic is encapsulated by the Service trait and injected into the handler."
-  - My thoughts being: "If we design a codebase correctly, each component becomes an implementation detail. We can then save time by reusing these components in other projects."
-
+- [Loco.rs](https://loco.rs/docs/getting-started/tour/#adding-a-crud-api)
+- [Cargo Generate](https://github.com/cargo-generate/cargo-generate)
+- [Cookiecutter actix simple clean architecture](https://github.com/microsoft/cookiecutter-rust-actix-clean-architecture)
 
 ## Overview
 This document outlines the design of a modular code generation library that facilitates creating, managing, and extending code generation modules. The library is designed to ensure flexibility, reusability, and scalability while addressing common issues in modular code generation workflows, such as dependencies, configuration, and extensibility.
@@ -37,8 +32,7 @@ This document outlines the design of a modular code generation library that faci
    - A module provides us with the smallest units of generation possible, in order for it to be composable.
 
 3. **Reproducibility**:
-   - Consistent generation outputs are ensured by locking module versions and configurations.
-
+  - Consistent generation outputs across environments.
 
 ### Current work
 
@@ -69,6 +63,12 @@ Ordered by priority:
        - This could allow us to have a more fluent API for defining code generation actions.
        - With these definitions of generation and mutation types, and removal types, it should be pretty easy to make some nice optimisations.
 
+4. A reflection based library that is able to read in the files from a template (at compile time), and then generate the code generation actions.
+   - This would be a more advanced feature, and would require some interesting work.
+   - Possible by generating an AST of the file. (askama_parser)
+   - Could be a separate crate 
+   - anvil-reflect etc.
+
 4. ~~Move to a purely "drag and drop" approach to templates. Have a standalone CLI that is able to read from a static `templates` directory that is located in the project root.~~
    - Then use file-based routing to route the files properly.
    - Would most likely have to move away from using askama, and move to something like mini-jinja
@@ -79,4 +79,4 @@ Ordered by priority:
    - Generating code based on the changes that a code generation block will make.
    - This will allow us to roll back the changes if needed.
    - Could be quite easily done with a diffing tool.
-   - Just use git?
+   - Why? Just use git?
