@@ -1,6 +1,6 @@
 [package]
 name = "anvil"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 homepage="https://github.com/anvil-rs/anvil"
 description="Anvil is a modular templating system for creating user-defined scaffolding systems."
