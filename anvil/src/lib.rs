@@ -1,4 +1,6 @@
-#![doc(html_logo_url = "")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/sjcobb2022/anvil/refs/heads/main/.github/assets/ANVIL.png"
+)]
 //! Anvil is a modular templating system for creating user-defined scaffolding systems
 //!
 //! # Ethos
