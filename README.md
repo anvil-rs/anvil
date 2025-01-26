@@ -1,6 +1,6 @@
 # Anvil
 
-Anvil is a modular templating system for creating user-defined scaffolding systems/
+Anvil is a modular templating system for creating user-defined scaffolding systems.
 
 ## Ethos
 
