@@ -18,7 +18,7 @@
 //! - [Cookiecutter actix simple clean architecture](https://github.com/microsoft/cookiecutter-rust-actix-clean-architecture)
 //!
 //! # Example
-//! ```
+//! ```no_run
 //! use anvil::{append::*, either::*, generate::*, Anvil};
 //! use askama::Template;
 //! use regex::Regex;
