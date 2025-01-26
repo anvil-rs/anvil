@@ -22,5 +22,4 @@ Anvil is a modular templating system for creating user-defined scaffolding syste
 2. **Extensibility**: Allow users to define their custom behaviors and integrate new modules with minimal effort.
 3. **Configurability**: Ensure that the system can be configured programmatically, providing users with complete control over their generated code structure and dependencies.
 4. **Scalability**: Support projects of varying sizes and complexities without sacrificing performance or usability.
-5. **Reproducibility**: Maintain consistent generation outputs across environments to enhance reliability and reduce errors.
-6. **Minimal Coupling**: Avoid creating a central module that ties everything together, ensuring that modules remain independent.
+5. **Minimal Coupling**: Avoid creating a central module that ties everything together, ensuring that modules remain independent.
