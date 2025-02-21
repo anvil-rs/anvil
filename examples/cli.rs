@@ -30,11 +30,6 @@ struct Controller {
     name: String,
 }
 
-// Generating things is a one-time operation.
-//
-// Therefore, we can also use this to "add" things to a system
-// We could, in theory, have a module that inits a totally new project.
-
 fn main() {
     let cli = Cli::parse();
 

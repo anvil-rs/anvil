@@ -36,6 +36,8 @@ where
 pub enum InjectError {
     #[error("file error {0}")]
     StdIo(#[from] std::io::Error),
+    #[error("askama error {0}")]
+    Askama(#[from] askama::Error),
 }
 
 impl<T> Anvil for Inject<'_, T>
@@ -47,7 +49,7 @@ where
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error> {
         let path = into.as_ref();
         let file_contents = std::fs::read_to_string(path).map_err(InjectError::StdIo)?;
-        let template = self.template.render().unwrap();
+        let template = self.template.render().map_err(InjectError::Askama)?;
 
         let mut lines = file_contents.lines().collect::<Vec<_>>();
 

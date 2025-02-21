@@ -48,6 +48,9 @@ pub mod generate;
 /// Injecting content into a file.
 pub mod inject;
 
+/// Replacing content in a file
+pub mod replace;
+
 use std::{error::Error, path::Path};
 
 /// Anvil is the base trait for all rendering engines.
