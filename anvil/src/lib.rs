@@ -66,3 +66,74 @@ pub trait Anvil {
 // and then we can just run them in order.
 // We need to define a construct that runs something in order?
 // I guess a function works to some extent.
+
+// TODO: Implement other types like in the other branch. Make type with const reference to template
+// for dynamic templating like tera or minijinja.
+//
+// Implementation for tera:
+// Have a const reference to templates such that we can use templates
+// between crates.
+// Then reference the template statically inside the rendering function.
+//
+//
+// A different approach:
+//  - File operations are a trait. These are defined as append, replace, inject, generate etc.
+//  - File operations are composed into scaffolds.
+//  - Scaffolds are run in order.
+//  - Scaffolds are defined in a file.
+//  - Scaffolds are defined in a file and then run in order.
+// pub trait Forge {
+//     type Error: Error;
+//     fn forge(&self, ) -> Result<(), Self::Error>;
+//     fn describe(&self) -> String;
+// }
+//
+// Forge is defined for the scaffolds themselves.
+//
+// Forge implemented for Append, Generate, Transform etc.
+// Anvil implemented for askama, tera etc.
+//
+// We implement forge for any type that generates anvil.
+//
+// Anvil is defined for the file operations. And templates
+//
+//
+// // Create a new file
+// pub struct Add<T: Template> {
+//     path: PathBuf,
+//     template: T,
+// }
+//
+// // Delete a file
+// pub struct Remove {
+//     path: PathBuf,
+// }
+//
+// // Rename/move a file
+// pub struct Move {
+//     from: PathBuf,
+//     to: PathBuf,
+// }
+//
+// // General-purpose transformer for file content
+// pub struct Transform {
+//     path: PathBuf,
+//     transformer: Box<dyn Fn(String) -> Result<String, Error>>,
+// }
+//
+//
+//
+// // Util
+// pub struct Either {}
+//
+
+
+struct Template {
+    name: String,
+}
+
+// impl Forge for Template {
+//     fn forge() -> Result<(), String> {
+//         MY_TEMPLATES.render
+//     }
+// }
