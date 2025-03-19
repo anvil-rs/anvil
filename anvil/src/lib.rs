@@ -39,17 +39,14 @@ pub mod append;
 /// Rendering either of two templates. If the first fails, the second is rendered.
 pub mod either;
 
-/// Additional askama filters.
-pub mod filters;
-
 /// Creating a file from a template.
 pub mod generate;
 
-/// Injecting content into a file.
-pub mod inject;
+/// Moving or renaming a file.
+pub mod mover;
 
-/// Replacing content in a file
-pub mod replace;
+/// Transforming the content of a file.
+pub mod transform;
 
 use std::{error::Error, path::Path};
 
@@ -57,6 +54,14 @@ use std::{error::Error, path::Path};
 /// It provides the basic functionality to render a template into a string or write it to a file.
 /// The error is the error that the rendering engine can produce.
 pub trait Anvil {
+    type Error: Error;
+    fn anvil(&self, writer: &mut (impl std::io::Write + ?Sized)) -> Result<(), Self::Error>;
+}
+
+/// Forge is the base trait for all scaffolding operations.
+/// It provides the basic functionality to create a scaffold from a template.
+/// The error is the error that the operation can produce.
+pub trait Forge {
     type Error: Error;
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;
 }
@@ -104,6 +109,12 @@ pub trait Anvil {
 //     template: T,
 // }
 //
+// // Append utility which is just an extension of add, but adding using append mode.
+// pub struct Append {
+//     path: PathBuf,
+//     template: T
+// }
+//
 // // Delete a file
 // pub struct Remove {
 //     path: PathBuf,
@@ -125,15 +136,22 @@ pub trait Anvil {
 //
 // // Util
 // pub struct Either {}
-//
 
-
-struct Template {
-    name: String,
-}
-
-// impl Forge for Template {
-//     fn forge() -> Result<(), String> {
+//     fn forge() -> esult<(), String> {
 //         MY_TEMPLATES.render
 //     }
 // }
+
+// Anvil has fn anvil
+// Forge has fn forge
+//
+// A forge needs an anvil to do it's work.
+//
+// Generate, Append, Transform are all Forgeable types.
+//
+// They require an anvil (a template for us to forge our directory)
+//
+// An askama template is an anvil type because we are able to implement
+//
+//
+// // "Any good anvil should be used to forge"
