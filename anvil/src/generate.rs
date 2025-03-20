@@ -48,11 +48,6 @@ impl<A: Anvil> Generate<A> {
     }
 }
 
-#[inline]
-pub fn generate<A: Anvil>(template: A) -> Generate<A> {
-    Generate::new(template)
-}
-
 // #[cfg(test)]
 // mod test {
 //

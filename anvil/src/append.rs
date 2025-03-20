@@ -44,11 +44,6 @@ impl<A: Anvil> Append<A> {
     }
 }
 
-#[inline]
-pub fn append<A: Anvil>(template: A) -> Append<A> {
-    Append::new(template)
-}
-
 // #[cfg(test)]
 // mod test {
 //

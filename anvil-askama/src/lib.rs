@@ -5,7 +5,8 @@ pub mod filters;
 
 pub mod extensions;
 
-pub use extensions::*;
+pub use extensions::append::{append, AskamaAppendExt};
+pub use extensions::generate::{generate, AskamaGenerateExt};
 
 pub struct Askama<'a, T: Template>(&'a T);
 

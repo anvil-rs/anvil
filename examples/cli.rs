@@ -1,5 +1,10 @@
-use anvil::{append::Append, either::Either, generate::Generate, Forge};
-use anvil_askama::{append::AskamaAppendExt, generate::AskamaGenerateExt};
+use anvil::{
+    append::Append,
+    either::{either, Either},
+    generate::Generate,
+    Forge,
+};
+use anvil_askama::{append, generate, AskamaAppendExt, AskamaGenerateExt};
 use askama::Template;
 use clap::{Args, Parser, Subcommand};
 
@@ -37,10 +42,10 @@ fn main() {
         Commands::Generate(con) => match con {
             Gen::Controller(controller) => {
                 // these two are equivelant.
+                either(append(controller), generate(controller))
+                    .forge("src/controllers/mod.rs")
+                    .unwrap();
 
-                // either(append(controller), generate(controller))
-                //     .forge("src/controllers/mod.rs")
-                //     .unwrap();
                 Either::new(Append::askama(controller), Generate::askama(controller))
                     .forge("src/controllers/mod.rs")
                     .unwrap();

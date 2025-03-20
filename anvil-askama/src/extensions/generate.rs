@@ -13,6 +13,7 @@ impl<'a, T: Template> AskamaGenerateExt<'a, T> for Generate<Askama<'a, T>> {
     }
 }
 
-pub fn append<T: Template>(template: &T) -> Generate<Askama<T>> {
+#[inline(always)]
+pub fn generate<T: Template>(template: &T) -> Generate<Askama<T>> {
     Generate::askama(template)
 }

@@ -13,6 +13,7 @@ impl<'a, T: Template> AskamaAppendExt<'a, T> for Append<Askama<'a, T>> {
     }
 }
 
+#[inline(always)]
 pub fn append<T: Template>(template: &T) -> Append<Askama<T>> {
     Append::askama(template)
 }
