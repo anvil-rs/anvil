@@ -21,6 +21,9 @@
     - The main issue is that the `askama` crate is so good, that it's hard to justify the work to add additional rendering engines.
     - It also allows each module to contain it's own templates with minimal effort.
 
+- The composable API branch contains a more user-friendly and refined API in comaprison to the design-pivot branch.
+- This branch is the most up to date with the current work.
+
 ## Additional Ideas
 
 Ordered by priority:
