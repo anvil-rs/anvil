@@ -5,9 +5,6 @@ pub mod filters;
 
 pub mod extensions;
 
-pub use extensions::append::{append, AskamaAppendExt};
-pub use extensions::generate::{generate, AskamaGenerateExt};
-
 pub struct Askama<'a, T: Template>(&'a T);
 
 impl<T: Template> Anvil for Askama<'_, T> {
@@ -16,4 +13,13 @@ impl<T: Template> Anvil for Askama<'_, T> {
     fn anvil(&self, writer: &mut (impl std::io::Write + ?Sized)) -> Result<(), std::io::Error> {
         self.0.write_into(writer)
     }
+}
+
+pub mod prelude {
+    pub use crate::extensions::{
+        append::{append, AskamaAppendExt},
+        generate::{generate, AskamaGenerateExt},
+    };
+    pub use crate::filters::*;
+    pub use crate::Askama;
 }

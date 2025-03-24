@@ -17,21 +17,6 @@
 //! - [Cargo Generate](https://github.com/cargo-generate/cargo-generate)
 //! - [Cookiecutter actix simple clean architecture](https://github.com/microsoft/cookiecutter-rust-actix-clean-architecture)
 //!
-//! # Example
-//! ```no_run
-//! use anvil::{append::*, either::*, generate::*, Anvil};
-//! use askama::Template;
-//! use regex::Regex;
-//!
-//! #[derive(Template)]
-//! #[template(source="controller.rs", ext="txt")]
-//! struct ExampleTemplate;
-//!
-//! let controller = &ExampleTemplate;
-//! either(append(controller), generate(controller))
-//!     .forge("src/controllers/mod.rs")
-//!     .unwrap();
-//! ```
 
 /// Appending content to a file.
 pub mod append;
@@ -61,6 +46,8 @@ pub trait Anvil {
 /// Forge is the base trait for all scaffolding operations.
 /// It provides the basic functionality to create a scaffold from a template.
 /// The error is the error that the operation can produce.
+///
+/// How we define our forge determines how we use our anvil.
 pub trait Forge {
     type Error: Error;
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;

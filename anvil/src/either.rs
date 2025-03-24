@@ -30,7 +30,6 @@ pub fn either<L: Forge, R: Forge>(left: L, right: R) -> Either<L, R> {
 #[cfg(test)]
 mod test {
     // use super::*;
-    // use crate::{append::append, generate::generate};
     // use askama::Template;
     // use std::fs::File;
     // use std::io::Write;

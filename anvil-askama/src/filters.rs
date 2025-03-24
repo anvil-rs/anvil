@@ -5,7 +5,7 @@ use heck::{ToKebabCase, ToLowerCamelCase, ToSnakeCase, ToTitleCase, ToUpperCamel
 /// # Example
 ///
 /// ```
-/// use anvil::filters;
+/// use anvil_askama::filters;
 /// use askama::Template;
 ///
 /// #[derive(Template)]
@@ -26,7 +26,7 @@ pub fn snakecase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
 /// # Example
 ///
 /// ```
-/// use anvil::filters;
+/// use anvil_askama::filters;
 /// use askama::Template;
 ///
 /// #[derive(Template)]
@@ -47,7 +47,7 @@ pub fn kebabcase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
 /// # Example
 ///
 /// ```
-/// use anvil::filters;
+/// use anvil_askama::filters;
 /// use askama::Template;
 ///
 /// #[derive(Template)]
@@ -68,7 +68,7 @@ pub fn camelcase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
 /// # Example
 ///
 /// ```
-/// use anvil::filters;
+/// use anvil_askama::filters;
 /// use askama::Template;
 ///
 /// #[derive(Template)]
@@ -89,7 +89,7 @@ pub fn pascalcase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
 /// # Example
 ///
 /// ```
-/// use anvil::filters;
+/// use anvil_askama::filters;
 /// use askama::Template;
 ///
 /// #[derive(Template)]

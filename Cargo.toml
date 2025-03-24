@@ -2,7 +2,8 @@
 resolver = "2"
 members = [
   "anvil", 
-  "anvil-askama", "anvil-liquid", 
+  "anvil-askama", 
+  "anvil-liquid", 
   "anvil-minijinja", 
   "anvil-tera", 
   "examples"

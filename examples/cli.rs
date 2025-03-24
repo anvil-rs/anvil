@@ -4,7 +4,7 @@ use anvil::{
     generate::Generate,
     Forge,
 };
-use anvil_askama::{append, generate, AskamaAppendExt, AskamaGenerateExt};
+use anvil_askama::prelude::*;
 use askama::Template;
 use clap::{Args, Parser, Subcommand};
 
