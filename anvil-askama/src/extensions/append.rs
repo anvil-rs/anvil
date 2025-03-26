@@ -9,7 +9,7 @@ pub trait AskamaAppendExt<'a, T: Template>: Forge {
 
 impl<'a, T: Template> AskamaAppendExt<'a, T> for Append<Askama<'a, T>> {
     fn askama(template: &'a T) -> Self {
-        Self::new(Askama(template)) // Convert Box<T> into &'static T (safe due to 'a lifetime)
+        Self::new(Askama(template))
     }
 }
 
@@ -17,7 +17,6 @@ impl<'a, T: Template> AskamaAppendExt<'a, T> for Append<Askama<'a, T>> {
 pub fn append<T: Template>(template: &T) -> Append<Askama<T>> {
     Append::askama(template)
 }
-
 
 #[cfg(test)]
 mod test {

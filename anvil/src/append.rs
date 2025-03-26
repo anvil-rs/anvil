@@ -9,7 +9,7 @@ pub enum AppendError {
     StdIo(#[from] std::io::Error),
     #[error("templating error")]
     // TODO: Store box dyn error (or option of box dyn error)
-    Template,
+    Template(#[from] Box<dyn std::error::Error>),
 }
 
 /// A struct that can be used to append a Template to a file.
@@ -32,7 +32,7 @@ impl<A: Anvil> Forge for Append<A> {
 
         self.template
             .anvil(&mut writer)
-            .map_err(|_e| AppendError::Template)?;
+            .map_err(|e| AppendError::Template(Box::new(e)))?;
 
         Ok(())
     }

@@ -39,7 +39,7 @@ use std::{error::Error, path::Path};
 /// It provides the basic functionality to render a template into a string or write it to a file.
 /// The error is the error that the rendering engine can produce.
 pub trait Anvil {
-    type Error: Error;
+    type Error: Error + 'static;
     fn anvil(&self, writer: &mut (impl std::io::Write + ?Sized)) -> Result<(), Self::Error>;
 }
 

@@ -18,7 +18,6 @@ pub fn generate<T: Template>(template: &T) -> Generate<Askama<T>> {
     Generate::askama(template)
 }
 
-
 #[cfg(test)]
 mod test {
 
