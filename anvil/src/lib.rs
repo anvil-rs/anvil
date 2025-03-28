@@ -40,7 +40,7 @@ use std::{error::Error, path::Path};
 /// The error is the error that the rendering engine can produce.
 pub trait Anvil {
     type Error: Error + 'static;
-    fn anvil(&self, writer: &mut (impl std::io::Write + ?Sized)) -> Result<(), Self::Error>;
+    fn anvil(&self, writer: &mut (impl std::io::Write + Sized)) -> Result<(), Self::Error>;
 }
 
 /// Forge is the base trait for all scaffolding operations.
