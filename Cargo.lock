@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-askama"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "anvil",
  "askama",
@@ -97,7 +97,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-liquid"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "anvil",
  "liquid",
@@ -107,7 +107,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-minijinja"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "anvil",
  "minijinja",
@@ -118,7 +118,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-tera"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "anvil",
  "serde",
