@@ -39,7 +39,7 @@ mod test {
         let result = generate(&TestTemplate).forge(&file_path);
         assert!(result.is_err());
         let file_contents = std::fs::read_to_string(&file_path).unwrap();
-        assert_eq!(file_contents, "Initial content.\n");
+        assert_eq!(file_contents.trim(), "Initial content.");
     }
 
     #[test]

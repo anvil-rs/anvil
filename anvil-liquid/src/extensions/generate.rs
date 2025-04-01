@@ -80,6 +80,7 @@ mod test {
         .forge(&file_path);
         assert!(result.is_ok());
         let file_contents = std::fs::read_to_string(&file_path).unwrap();
-        assert_eq!(file_contents, "Hello, World!\n");
+        // trim newlines to fix windows tests
+        assert_eq!(file_contents.trim(), "Hello, World!");
     }
 }
