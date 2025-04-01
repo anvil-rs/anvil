@@ -58,7 +58,7 @@ jobs:
         uses: giraffate/clippy-action@v1
         with:
           reporter: 'github-pr-check'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
   semver:
     runs-on: ubuntu-latest
     name: semver
@@ -78,6 +78,11 @@ jobs:
     # API be documented as only available in some specific platforms.
     runs-on: ubuntu-latest
     name: nightly / doc
+    strategy:
+      fail-fast: false
+      matrix:
+        # Get early warning of new lints which are regularly introduced in beta channels.
+        crate: [anvil, anvil-askama, anvil-liquid, anvil-minijinja, anvil-tera]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -87,7 +92,7 @@ jobs:
       - name: Install cargo-docs-rs
         uses: dtolnay/install@cargo-docs-rs
       - name: cargo docs-rs
-        run: cargo docs-rs
+        run: cargo docs-rs -p ${{ matrix.crate }}
   hack:
     # cargo-hack checks combinations of feature flags to ensure that features are all additive
     # which is required for feature unification
