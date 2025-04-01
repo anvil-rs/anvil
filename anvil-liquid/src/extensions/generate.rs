@@ -2,19 +2,19 @@ use anvil::{generate::Generate, Forge};
 
 use crate::{Aqua, Water};
 
-pub trait TeraGenerateExt<'a, T: Water>: Forge {
-    fn tera(template: &'a T) -> Self;
+pub trait LiquidGenerateExt<'a, T: Water>: Forge {
+    fn liquid(template: &'a T) -> Self;
 }
 
-impl<'a, T: Water> TeraGenerateExt<'a, T> for Generate<Aqua<'a, T>> {
-    fn tera(template: &'a T) -> Self {
+impl<'a, T: Water> LiquidGenerateExt<'a, T> for Generate<Aqua<'a, T>> {
+    fn liquid(template: &'a T) -> Self {
         Self::new(Aqua(template))
     }
 }
 
 #[inline(always)]
 pub fn generate<T: Water>(template: &T) -> Generate<Aqua<'_, T>> {
-    Generate::tera(template)
+    Generate::liquid(template)
 }
 
 #[cfg(test)]

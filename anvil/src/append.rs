@@ -7,8 +7,7 @@ use crate::{Anvil, Forge};
 pub enum AppendError {
     #[error("file error {0}")]
     StdIo(#[from] std::io::Error),
-    #[error("templating error")]
-    // TODO: Store box dyn error (or option of box dyn error)
+    #[error("templating error {0}")]
     Template(#[from] Box<dyn std::error::Error>),
 }
 

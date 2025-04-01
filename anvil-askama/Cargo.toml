@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 anvil = { path = "../anvil" }
-askama = "0.12.1"
+askama = "0.13.0"
 heck = "0.5.0"
 thiserror = "2.0.9"
 

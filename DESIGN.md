@@ -23,6 +23,7 @@
 
 - The composable API branch contains a more user-friendly and refined API in comaprison to the design-pivot branch.
 - This branch is the most up to date with the current work.
+- TODO on this is documentation and cleanups.
 
 ## Additional Ideas
 

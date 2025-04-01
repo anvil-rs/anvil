@@ -18,6 +18,14 @@ impl<T: Earth> Anvil for Firma<'_, T> {
     }
 }
 
+pub mod prelude {
+    pub use crate::extensions::{
+        append::{append, TeraAppendExt},
+        generate::{generate, TeraGenerateExt},
+    };
+    pub use crate::Earth;
+}
+
 /// Macro to generate the Earth trait implementation for a struct.
 /// This macro takes in the name of the struct, the name of a template, and a reference to a global, lazy locked tera instance.
 /// It then creates a context from self (because earth implies serialize and therefore we can create context from serialize) and then render_to template, with context.
@@ -50,14 +58,6 @@ macro_rules! make_tera_template {
             }
         }
     };
-}
-
-pub mod prelude {
-    pub use crate::extensions::{
-        append::{append, TeraAppendExt},
-        generate::{generate, TeraGenerateExt},
-    };
-    pub use crate::Earth;
 }
 
 #[cfg(test)]

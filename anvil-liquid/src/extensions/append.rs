@@ -2,11 +2,11 @@ use anvil::{append::Append, Forge};
 
 use crate::{Aqua, Water};
 
-pub trait TeraAppendExt<'a, T: Water>: Forge {
+pub trait LiquidAppendExt<'a, T: Water>: Forge {
     fn liquid(template: &'a T) -> Self;
 }
 
-impl<'a, T: Water> TeraAppendExt<'a, T> for Append<Aqua<'a, T>> {
+impl<'a, T: Water> LiquidAppendExt<'a, T> for Append<Aqua<'a, T>> {
     fn liquid(template: &'a T) -> Self {
         Self::new(Aqua(template))
     }

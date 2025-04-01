@@ -11,7 +11,7 @@ impl<T: Template> Anvil for Askama<'_, T> {
     type Error = std::io::Error;
 
     fn anvil(&self, writer: &mut (impl std::io::Write + ?Sized)) -> Result<(), std::io::Error> {
-        self.0.write_into(writer)
+        Template::write_into(&self.0, writer)
     }
 }
 

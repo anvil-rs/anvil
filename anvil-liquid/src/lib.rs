@@ -20,8 +20,12 @@ impl<T: Water> Anvil for Aqua<'_, T> {
 }
 
 pub mod prelude {
+    pub use crate::extensions::{
+        append::{append, LiquidAppendExt},
+        generate::{generate, LiquidGenerateExt},
+    };
+
     pub use crate::Water;
-    // Export any extensions here similar to Tera implementation
 }
 
 #[macro_export]
@@ -39,26 +43,23 @@ macro_rules! make_liquid_template {
 
 #[cfg(test)]
 mod test {
+    use super::*;
     use crate::{Aqua, Water};
     use anvil::Anvil;
     use liquid::ParserBuilder;
     use serde::Serialize;
-    use std::sync::LazyLock;
+    use std::{fs::File, sync::LazyLock};
+    use tempfile::tempdir;
 
     static PARSER: LazyLock<liquid::Parser> =
         LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());
 
     #[derive(Serialize)]
-    struct TestTemplate {}
-
-    make_liquid_template!(TestTemplate, "test", PARSER);
-
-    #[derive(Serialize)]
-    struct TestWater {
+    struct TestTemplate {
         name: String,
     }
 
-    impl Water for TestWater {
+    impl Water for TestTemplate {
         fn liquid(&self, writer: &mut dyn std::io::Write) -> Result<(), liquid::Error> {
             let object = liquid::to_object(self)?;
             let template = PARSER.parse("Hello, {{ name }}!")?;
@@ -68,7 +69,7 @@ mod test {
 
     #[test]
     fn it_can_render_template() {
-        let template = TestWater {
+        let template = TestTemplate {
             name: "World".to_string(),
         };
 

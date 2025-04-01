@@ -17,8 +17,8 @@ pub struct Generate<A: Anvil> {
 pub enum GenerateError {
     #[error("file error {0}")]
     StdIo(#[from] std::io::Error),
-    #[error("template error")]
-    Template,
+    #[error("template error {0}")]
+    Template(#[from] Box<dyn std::error::Error>),
 }
 
 impl<A: Anvil> Forge for Generate<A> {
@@ -36,7 +36,7 @@ impl<A: Anvil> Forge for Generate<A> {
 
         self.template
             .anvil(&mut writer)
-            .map_err(|_e| GenerateError::Template)?;
+            .map_err(|e| GenerateError::Template(Box::new(e)))?;
 
         Ok(())
     }
