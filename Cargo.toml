@@ -1,6 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-    "anvil",
-    "examples"
+  "anvil", 
+  "anvil-askama", 
+  "anvil-liquid", 
+  "anvil-minijinja", 
+  "anvil-tera", 
+  "examples"
 ]
