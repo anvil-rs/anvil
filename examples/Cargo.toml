@@ -10,8 +10,8 @@ askama = "0.13.0"
 clap = { version = "4.5.23", features = ["derive"] }
 heck = "0.5.0"
 regex = "1.11.1"
-anvil = { path = "../anvil" }
-anvil-askama = { path = "../anvil-askama" }
+anvil = "0.3.0"
+anvil-askama = "0.1.0"
 
 [[example]]
 name = "cli"
