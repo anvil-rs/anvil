@@ -2,11 +2,16 @@
 name = "anvil-tera"
 version = "0.1.0"
 edition = "2021"
+homepage="https://github.com/anvil-rs/anvil"
+description="Anvil wrapper for the tera skama templating library"
+license="MIT"
+readme="../README.md"
+repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
+anvil = "0.3.0"
 serde = { version = "1.0.219", features = ["derive"] }
 tera = { version = "1.20.0" } 
-anvil = { path = "../anvil" }
 
 # For -Zminimal-versions
 [target.'cfg(any())'.dependencies]

@@ -2,10 +2,15 @@
 name = "anvil-liquid"
 version = "0.1.0"
 edition = "2021"
+homepage="https://github.com/anvil-rs/anvil"
+description="Anvil wrapper for the liquid templating library"
+license="MIT"
+readme="../README.md"
+repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
+anvil = "0.3.0"
 liquid = "0.26.11"
-anvil = { path = "../anvil" }
 serde = { version = "1.0.219", features = ["derive"] }
 
 [dev-dependencies]
