@@ -9,7 +9,7 @@ readme="../README.md"
 repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
-anvil = "0.3.1"
+anvil = "0.3.0"
 liquid = "0.26.11"
 serde = { version = "1.0.219", features = ["derive"] }
 
