@@ -58,7 +58,7 @@ impl Move {
 
 impl Forge for Move {
     type Error = std::io::Error;
-    
+
     /// Moves or renames the file to the destination path.
     ///
     /// This method:
@@ -101,22 +101,22 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let source_path = temp_dir.path().join("source.txt");
         let test_content = "Test content";
-        
+
         // Create and write to source file
         std::fs::write(&source_path, test_content).unwrap();
-        
+
         // Create destination path
         let dest_path = temp_dir.path().join("destination.txt");
-        
+
         // Create and use the Move
         let mover = Move::new(&source_path);
         let result = mover.forge(&dest_path);
         assert!(result.is_ok());
-        
+
         // Verify the file was moved
         assert!(!source_path.exists());
         assert!(dest_path.exists());
-        
+
         // Verify content was preserved
         let content = std::fs::read_to_string(&dest_path).unwrap();
         assert_eq!(content, test_content);
@@ -126,15 +126,15 @@ mod tests {
     fn test_move_fails_with_nonexistent_source() {
         // Create a temporary directory
         let temp_dir = tempdir().unwrap();
-        
+
         // Create paths for nonexistent source and destination
         let source_path = temp_dir.path().join("nonexistent.txt");
         let dest_path = temp_dir.path().join("destination.txt");
-        
+
         // Create and use the Move
         let mover = Move::new(&source_path);
         let result = mover.forge(&dest_path);
-        
+
         // Should fail with a file not found error
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().kind(), std::io::ErrorKind::NotFound);
@@ -145,25 +145,25 @@ mod tests {
         // Create two temporary directories
         let source_dir = tempdir().unwrap();
         let dest_dir = tempdir().unwrap();
-        
+
         // Create source file
         let source_path = source_dir.path().join("source.txt");
         let test_content = "Cross-directory move test";
         std::fs::write(&source_path, test_content).unwrap();
-        
+
         // Create destination path in different directory
         let dest_path = dest_dir.path().join("moved.txt");
-        
+
         // Create and use the Move
         let mover = Move::new(&source_path);
         let result = mover.forge(&dest_path);
-        
+
         // This might fail on some systems if directories are on different filesystems
         if result.is_ok() {
             // Verify the file was moved
             assert!(!source_path.exists());
             assert!(dest_path.exists());
-            
+
             // Verify content was preserved
             let content = std::fs::read_to_string(&dest_path).unwrap();
             assert_eq!(content, test_content);

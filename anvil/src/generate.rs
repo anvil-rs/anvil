@@ -8,7 +8,7 @@ use crate::Forge;
 
 /// A struct that generates a new file from a template.
 ///
-/// `Generate` takes an [`Anvil`] implementation (template) and creates a new file with 
+/// `Generate` takes an [`Anvil`] implementation (template) and creates a new file with
 /// the rendered content. It will create any necessary parent directories automatically,
 /// ensuring that the file can be created even in a nested directory structure.
 ///
@@ -59,7 +59,7 @@ pub enum GenerateError {
     /// Error that occurred during file IO operations.
     #[error("failed to perform file I/O while generating file: {0}")]
     StdIo(#[from] std::io::Error),
-    
+
     /// Error that occurred during template rendering.
     #[error("failed to render template during file generation: {0}")]
     Template(#[from] Box<dyn std::error::Error>),
@@ -233,4 +233,3 @@ mod tests {
         }
     }
 }
-

@@ -3,9 +3,9 @@ use std::path::Path;
 
 /// A struct that implements a fallback mechanism between two operations.
 ///
-/// `Either` takes two operations that implement the [`Forge`] trait and tries 
-/// to execute the first one. If the first operation fails, it falls back to 
-/// the second operation. This provides a resilient way to handle operations 
+/// `Either` takes two operations that implement the [`Forge`] trait and tries
+/// to execute the first one. If the first operation fails, it falls back to
+/// the second operation. This provides a resilient way to handle operations
 /// that might fail, giving an alternative approach.
 ///
 /// # Type Parameters
@@ -56,7 +56,7 @@ pub struct Either<L: Forge, R: Forge> {
 impl<L: Forge, R: Forge> Forge for Either<L, R> {
     /// The error type from the right operation
     type Error = R::Error;
-    
+
     /// Attempts the left operation first, then falls back to the right operation if needed.
     ///
     /// This method:
@@ -170,21 +170,24 @@ mod tests {
         // Create temporary test directory
         let temp_dir = tempdir().unwrap();
         let test_path = temp_dir.path().join("test.txt");
-        
+
         // Create successful left forge
-        let left = MockForge {
-            action: || Ok(()),
-        };
-        
+        let left = MockForge { action: || Ok(()) };
+
         // Create successful right forge (should not be used)
         let right = MockForge {
-            action: || Err(io::Error::new(io::ErrorKind::Other, "Right should not be called")),
+            action: || {
+                Err(io::Error::new(
+                    io::ErrorKind::Other,
+                    "Right should not be called",
+                ))
+            },
         };
-        
+
         // Create and use Either
         let either_forge = either(left, right);
         let result = either_forge.forge(&test_path);
-        
+
         // Should succeed using the left forge
         assert!(result.is_ok());
     }
@@ -194,21 +197,19 @@ mod tests {
         // Create temporary test directory
         let temp_dir = tempdir().unwrap();
         let test_path = temp_dir.path().join("test.txt");
-        
+
         // Create failing left forge
         let left = MockForge {
             action: || Err(io::Error::new(io::ErrorKind::Other, "Left fails")),
         };
-        
+
         // Create successful right forge (should be used)
-        let right = MockForge {
-            action: || Ok(()),
-        };
-        
+        let right = MockForge { action: || Ok(()) };
+
         // Create and use Either
         let either_forge = either(left, right);
         let result = either_forge.forge(&test_path);
-        
+
         // Should succeed using the right forge
         assert!(result.is_ok());
     }
@@ -218,22 +219,22 @@ mod tests {
         // Create temporary test directory
         let temp_dir = tempdir().unwrap();
         let test_path = temp_dir.path().join("test.txt");
-        
+
         // Create failing left forge
         let left = MockForge {
             action: || Err(io::Error::new(io::ErrorKind::Other, "Left fails")),
         };
-        
+
         // Create failing right forge with a different error
         let right_error = "Right fails too";
         let right = MockForge {
             action: move || Err(io::Error::new(io::ErrorKind::Other, right_error)),
         };
-        
+
         // Create and use Either
         let either_forge = either(left, right);
         let result = either_forge.forge(&test_path);
-        
+
         // Should fail with the right forge's error
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().to_string(), right_error);
@@ -242,17 +243,13 @@ mod tests {
     #[test]
     fn test_either_convenience_function() {
         // Create simple test forges
-        let left = MockForge {
-            action: || Ok(()),
-        };
-        
-        let right = MockForge {
-            action: || Ok(()),
-        };
-        
+        let left = MockForge { action: || Ok(()) };
+
+        let right = MockForge { action: || Ok(()) };
+
         // Create Either using the convenience function
         let either_forge = either(left, right);
-        
+
         // Just a simple test to ensure the convenience function works
         let test_path = PathBuf::from("/tmp/test.txt"); // Path doesn't matter for this test
         let result = either_forge.forge(test_path);

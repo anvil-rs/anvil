@@ -12,7 +12,7 @@ pub enum AppendError {
     /// Error that occurred during file IO operations.
     #[error("failed to perform file I/O while appending content: {0}")]
     StdIo(#[from] std::io::Error),
-    
+
     /// Error that occurred during template rendering.
     #[error("failed to render template during append operation: {0}")]
     Template(#[from] Box<dyn std::error::Error>),

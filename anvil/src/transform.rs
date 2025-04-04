@@ -6,7 +6,7 @@ use crate::Forge;
 
 /// A type alias for a boxed error that can be sent across threads.
 ///
-/// This alias simplifies the error handling in transformer functions 
+/// This alias simplifies the error handling in transformer functions
 /// by allowing any error type that implements `Error + Send + Sync` to be returned.
 pub type BoxedError = Box<dyn Error + Send + Sync>;
 
@@ -122,7 +122,7 @@ pub enum TransformError {
     /// Error that occurred during file IO operations (reading or writing).
     #[error("failed to perform file I/O while transforming file: {0}")]
     StdIo(#[from] std::io::Error),
-    
+
     /// Error that occurred during the transformation function.
     #[error("failed to apply transformation to file content: {0}")]
     Transform(#[from] BoxedError),
@@ -130,7 +130,7 @@ pub enum TransformError {
 
 impl Forge for Transform {
     type Error = TransformError;
-    
+
     /// Transforms the content of the file at the specified path.
     ///
     /// This method:
@@ -171,11 +171,10 @@ mod tests {
     #[test]
     fn test_transform_applies_function() {
         // Create a transform that converts text to uppercase
-        let transformer = |input: String| -> Result<String, BoxedError> {
-            Ok(input.to_uppercase())
-        };
+        let transformer =
+            |input: String| -> Result<String, BoxedError> { Ok(input.to_uppercase()) };
         let transform = Transform::new(transformer);
-        
+
         let input = "hello world";
         let result = transform.apply(input).unwrap();
         assert_eq!(result, "HELLO WORLD");
@@ -189,11 +188,10 @@ mod tests {
         temp_file.write_all(original_content.as_bytes()).unwrap();
 
         // Create a transform that converts text to uppercase
-        let transformer = |input: String| -> Result<String, BoxedError> {
-            Ok(input.to_uppercase())
-        };
+        let transformer =
+            |input: String| -> Result<String, BoxedError> { Ok(input.to_uppercase()) };
         let transform = Transform::new(transformer);
-        
+
         // Apply the transform
         let result = transform.forge(temp_file.path());
         assert!(result.is_ok());
@@ -206,19 +204,18 @@ mod tests {
     #[test]
     fn test_transform_handles_error() {
         // Create a transformer that always returns an error
-        let transformer = |_: String| -> Result<String, BoxedError> {
-            Err("transform failed".into())
-        };
+        let transformer =
+            |_: String| -> Result<String, BoxedError> { Err("transform failed".into()) };
         let transform = Transform::new(transformer);
-        
+
         // Create a temporary file
         let mut temp_file = NamedTempFile::new().unwrap();
         temp_file.write_all(b"content").unwrap();
-        
+
         // Apply the transform
         let result = transform.forge(temp_file.path());
         assert!(result.is_err());
-        
+
         match result {
             Err(TransformError::Transform(err)) => assert_eq!(err.to_string(), "transform failed"),
             other => panic!("Expected Transform error but got: {:?}", other),
@@ -229,13 +226,13 @@ mod tests {
     fn test_transform_handles_file_not_found() {
         // Create a path to a file that doesn't exist
         let nonexistent_path = tempdir().unwrap().path().join("nonexistent_file.txt");
-        
+
         // Create a simple transform
         let transform = Transform::new(|s| Ok(s));
-        
+
         // Apply the transform
         let result = transform.forge(nonexistent_path);
-        
+
         // Should fail with a file not found error
         assert!(result.is_err());
         match result {
@@ -249,21 +246,21 @@ mod tests {
         // Create a counter to track transform calls
         let counter = Arc::new(std::sync::Mutex::new(0));
         let counter_clone = counter.clone();
-        
+
         // Create a transform that increments counter
         let transformer = move |input: String| -> Result<String, BoxedError> {
             let mut count = counter_clone.lock().unwrap();
             *count += 1;
             Ok(format!("{} (transformed {} times)", input, *count))
         };
-        
+
         let transform = Transform::new(transformer);
-        
+
         // Apply the transform multiple times
         let input = "hello";
         let result1 = transform.apply(input).unwrap();
         let result2 = transform.apply(input).unwrap();
-        
+
         assert_eq!(result1, "hello (transformed 1 times)");
         assert_eq!(result2, "hello (transformed 2 times)");
         assert_eq!(*counter.lock().unwrap(), 2);
