@@ -86,7 +86,7 @@
 /// Module for appending content to existing files.
 ///
 /// The operations in this module allow you to add content to the end of existing files
-/// using the [`Append`] struct.
+/// using the [`Append`](`append::Append`) struct.
 ///
 /// # Example
 ///
@@ -124,7 +124,7 @@ pub mod append;
 
 /// Module for fallback mechanisms between two operations.
 ///
-/// This module provides the [`Either`] struct for creating fallback operations - if the first
+/// This module provides the [`Either`](`either::Either`) struct for creating fallback operations - if the first
 /// operation fails, the second one will be attempted.
 ///
 /// # Example
@@ -176,7 +176,7 @@ pub mod either;
 
 /// Module for creating files from templates.
 ///
-/// This module provides the [`Generate`] struct for generating new files from templates.
+/// This module provides the [`Generate`](`generate::Generate`) struct for generating new files from templates.
 /// The file and parent directories will be created if they don't exist.
 ///
 /// # Example
@@ -215,7 +215,7 @@ pub mod generate;
 
 /// Module for moving or renaming files.
 ///
-/// This module provides the [`Move`] struct for moving or renaming files.
+/// This module provides the [`Move`](`mover::Move`) struct for moving or renaming files.
 ///
 /// # Example
 ///
@@ -234,7 +234,7 @@ pub mod mover;
 
 /// Module for transforming the content of existing files.
 ///
-/// This module provides the [`Transform`] struct for reading, modifying,
+/// This module provides the [`Transform`](`transform::Transform`) struct for reading, modifying,
 /// and writing back file content.
 ///
 /// # Example
