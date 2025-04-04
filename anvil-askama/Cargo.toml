@@ -1,6 +1,6 @@
 [package]
 name = "anvil-askama"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 homepage="https://github.com/anvil-rs/anvil"
 description="Anvil wrapper for the askama templating library"
