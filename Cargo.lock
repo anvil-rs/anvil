@@ -79,14 +79,6 @@ dependencies = [
 [[package]]
 name = "anvil"
 version = "0.3.0"
-dependencies = [
- "tempfile",
- "thiserror",
-]
-
-[[package]]
-name = "anvil"
-version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d611a5acbc87f8cadf27148aa2dc235ceba4e8e000c8ee04e83d3a98053ba1d2"
 dependencies = [
@@ -94,12 +86,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "anvil-askama"
-version = "0.1.0"
+name = "anvil"
+version = "0.3.1"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "askama",
- "heck",
  "tempfile",
  "thiserror",
 ]
@@ -110,17 +99,28 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d496ed8789205fee1018b1a551581aace2d27a8c6d5d33285be76df86a472d6e"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil 0.3.0",
  "askama",
  "heck",
  "thiserror",
 ]
 
 [[package]]
-name = "anvil-liquid"
-version = "0.1.0"
+name = "anvil-askama"
+version = "0.1.1"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil 0.3.0",
+ "askama",
+ "heck",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "anvil-liquid"
+version = "0.1.1"
+dependencies = [
+ "anvil 0.3.0",
  "liquid",
  "serde",
  "tempfile",
@@ -128,9 +128,9 @@ dependencies = [
 
 [[package]]
 name = "anvil-minijinja"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil 0.3.0",
  "minijinja",
  "minijinja-embed",
  "serde",
@@ -139,9 +139,9 @@ dependencies = [
 
 [[package]]
 name = "anvil-tera"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil 0.3.0",
  "pest",
  "serde",
  "slug",
@@ -245,9 +245,9 @@ checksum = "1628fb46dfa0b37568d12e5edd512553eccf6a22a78e8bde00bb4aed84d5bdbf"
 
 [[package]]
 name = "cc"
-version = "1.2.17"
+version = "1.2.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fcb57c740ae1daf453ae85f16e37396f672b039e00d9d866e07ddb24e328e3a"
+checksum = "525046617d8376e3db1deffb079e91cef90a89fc3ca5c185bbf8c9ecdd15cd5c"
 dependencies = [
  "shlex",
 ]
@@ -421,9 +421,9 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "errno"
-version = "0.3.10"
+version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
+checksum = "976dd42dc7e85965fe702eb8164f21f450704bdde31faefd6471dba214cb594e"
 dependencies = [
  "libc",
  "windows-sys",
@@ -433,8 +433,8 @@ dependencies = [
 name = "examples"
 version = "0.0.0"
 dependencies = [
- "anvil 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "anvil-askama 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil 0.3.0",
+ "anvil-askama 0.1.0",
  "askama",
  "clap",
  "heck",
