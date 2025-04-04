@@ -104,3 +104,53 @@ pub fn pascalcase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
 pub fn titlecase<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
     Ok(s.to_string().to_title_case())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_snakecase() {
+        assert_eq!(snakecase("HelloWorld").unwrap(), "hello_world");
+        assert_eq!(snakecase("hello-world").unwrap(), "hello_world");
+        assert_eq!(snakecase("HELLO_WORLD").unwrap(), "hello_world");
+        assert_eq!(snakecase("hello world").unwrap(), "hello_world");
+        assert_eq!(snakecase(123).unwrap(), "123");
+    }
+
+    #[test]
+    fn test_kebabcase() {
+        assert_eq!(kebabcase("HelloWorld").unwrap(), "hello-world");
+        assert_eq!(kebabcase("hello_world").unwrap(), "hello-world");
+        assert_eq!(kebabcase("HELLO_WORLD").unwrap(), "hello-world");
+        assert_eq!(kebabcase("hello world").unwrap(), "hello-world");
+        assert_eq!(kebabcase(123).unwrap(), "123");
+    }
+
+    #[test]
+    fn test_camelcase() {
+        assert_eq!(camelcase("HelloWorld").unwrap(), "helloWorld");
+        assert_eq!(camelcase("hello_world").unwrap(), "helloWorld");
+        assert_eq!(camelcase("hello-world").unwrap(), "helloWorld");
+        assert_eq!(camelcase("hello world").unwrap(), "helloWorld");
+        assert_eq!(camelcase(123).unwrap(), "123");
+    }
+
+    #[test]
+    fn test_pascalcase() {
+        assert_eq!(pascalcase("helloWorld").unwrap(), "HelloWorld");
+        assert_eq!(pascalcase("hello_world").unwrap(), "HelloWorld");
+        assert_eq!(pascalcase("hello-world").unwrap(), "HelloWorld");
+        assert_eq!(pascalcase("hello world").unwrap(), "HelloWorld");
+        assert_eq!(pascalcase(123).unwrap(), "123");
+    }
+
+    #[test]
+    fn test_titlecase() {
+        assert_eq!(titlecase("helloWorld").unwrap(), "Hello World");
+        assert_eq!(titlecase("hello_world").unwrap(), "Hello World");
+        assert_eq!(titlecase("hello-world").unwrap(), "Hello World");
+        assert_eq!(titlecase("hello world").unwrap(), "Hello World");
+        assert_eq!(titlecase(123).unwrap(), "123");
+    }
+}
