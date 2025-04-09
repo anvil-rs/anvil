@@ -62,18 +62,6 @@
 //! }
 //! ```
 //!
-//! ## Available Operations
-//!
-//! Anvil provides these main operations:
-//!
-//! - [`generate`] - Create new files from templates
-//! - [`append`] - Add content to existing files
-//! - [`transform`] - Transform the content of existing files
-//! - [`mover`] - Move/rename files
-//! - [`either`] - Fallback mechanism for operations
-//!
-//! These operations can be composed to create complex scaffolding workflows.
-//!
 //! ## Inspiration and Credits
 //!
 //! - [Laravel Artisan](https://laravel.com/docs/11.x/artisan)
