@@ -68,7 +68,7 @@ mod test {
         name: String,
     }
 
-    make_liquid_template!(TestFile, "templates/test.txt", PARSER);
+    make_liquid_template!(TestFile, "../../templates/test.txt", PARSER);
 
     #[test]
     fn it_can_render_from_file() {

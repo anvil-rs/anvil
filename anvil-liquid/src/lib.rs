@@ -31,11 +31,13 @@ pub mod prelude {
 #[macro_export]
 macro_rules! make_liquid_template {
     ($struct:ident, $template:expr, $parser:expr) => {
+        static TEMPLATE: std::sync::LazyLock<liquid::Template> =
+            LazyLock::new(|| $parser.parse(include_str!($template)).unwrap());
+
         impl Water for $struct {
             fn liquid(&self, writer: &mut dyn std::io::Write) -> Result<(), liquid::Error> {
                 let object = liquid::to_object(self)?;
-                let template = $parser.parse_file($template)?;
-                template.render_to(writer, &object)
+                TEMPLATE.render_to(writer, &object)
             }
         }
     };
@@ -43,13 +45,11 @@ macro_rules! make_liquid_template {
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use crate::{Aqua, Water};
     use anvil::Anvil;
     use liquid::ParserBuilder;
     use serde::Serialize;
-    use std::{fs::File, sync::LazyLock};
-    use tempfile::tempdir;
+    use std::sync::LazyLock;
 
     static PARSER: LazyLock<liquid::Parser> =
         LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());

@@ -19,7 +19,6 @@ pub fn append<T: Earth>(template: &T) -> Append<Firma<'_, T>> {
 
 #[cfg(test)]
 mod test {
-
     static TEMPLATES: LazyLock<Tera> = LazyLock::new(|| {
         let mut tera = match Tera::new("templates/**/*") {
             Ok(t) => t,

@@ -34,7 +34,7 @@ mod liquid_templates {
 
     anvil_liquid::make_liquid_template!(
         ServiceTemplate,
-        "examples/templates/mixed_templates/service.ts",
+        "templates/mixed_templates/service.ts",
         PARSER
     );
 }

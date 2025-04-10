@@ -19,7 +19,6 @@ pub fn generate<T: Earth>(template: &T) -> Generate<Firma<'_, T>> {
 
 #[cfg(test)]
 mod test {
-
     static TEMPLATES: LazyLock<Tera> = LazyLock::new(|| {
         let mut tera = match Tera::new("templates/**/*") {
             Ok(t) => t,

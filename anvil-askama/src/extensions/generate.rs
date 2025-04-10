@@ -20,7 +20,6 @@ pub fn generate<T: Template>(template: &T) -> Generate<Askama<T>> {
 
 #[cfg(test)]
 mod test {
-
     use super::*;
     use std::fs::File;
     use std::io::Write;
