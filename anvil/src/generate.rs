@@ -229,7 +229,7 @@ mod tests {
         assert!(result.is_err());
         match result {
             Err(GenerateError::Template(err)) => assert_eq!(err.to_string(), "Template error"),
-            other => panic!("Expected Template error but got: {:?}", other),
+            other => unreachable!("Expected Template error but got: {:?}", other),
         }
     }
 }

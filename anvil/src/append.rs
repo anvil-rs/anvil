@@ -182,7 +182,7 @@ mod tests {
 
         match result {
             Err(AppendError::StdIo(err)) => assert_eq!(err.kind(), std::io::ErrorKind::NotFound),
-            other => panic!("Expected AppendError::StdIo but got: {:?}", other),
+            other => unreachable!("Expected AppendError::StdIo but got: {:?}", other),
         }
     }
 }
