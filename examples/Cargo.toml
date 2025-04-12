@@ -5,6 +5,9 @@ publish = false
 edition = "2021"
 license = "MIT"
 
+[build-dependencies]
+minijinja-embed = "2.9.0"
+
 [dev-dependencies]
 askama = "0.13.0"
 clap = { version = "4.5.23", features = ["derive"] }
@@ -12,7 +15,27 @@ heck = "0.5.0"
 regex = "1.11.1"
 anvil = "0.3.0"
 anvil-askama = "0.1.0"
+anvil-liquid = "0.2.1"
+anvil-minijinja = "0.1.0"
+anvil-tera = "0.1.0"
+serde = { version = "1.0.219", features = ["derive"] } 
+liquid = "0.26.9"
+minijinja-embed = "2.9.0"
+minijinja = "2.9.0"
+tera = "1.20.0"
 
 [[example]]
 name = "cli"
 path = "cli.rs"
+
+[[example]]
+name = "mixed_templates"
+path = "mixed_templates.rs"
+
+[[example]]
+name = "axum_generator"
+path = "axum_generator.rs"
+
+[[example]]
+name = "file_operations"
+path = "file_operations.rs"

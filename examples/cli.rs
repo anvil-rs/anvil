@@ -30,9 +30,10 @@ enum Gen {
 }
 
 #[derive(Args, Template, Clone)]
-#[template(path = "controller.rs", escape = "none")] // using the template in this path, relative
+#[template(path = "cli/controller.rs", escape = "none")] // using the template in this path, relative
 struct Controller {
     name: String,
+    actions: Vec<String>,
 }
 
 fn main() {

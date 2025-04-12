@@ -30,8 +30,6 @@ mod test {
     static PARSER: LazyLock<liquid::Parser> =
         LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());
 
-    // NOTE: This template needs the dummy braces to be recognized by Tera because a completely
-    // empty struct us not parseable json.
     #[derive(Serialize)]
     struct TestTemplate {}
 
@@ -68,7 +66,7 @@ mod test {
         name: String,
     }
 
-    make_liquid_template!(TestFile, "templates/test.txt", PARSER);
+    make_liquid_template!(TestFile, "../../templates/test.txt", PARSER);
 
     #[test]
     fn it_can_render_from_file() {

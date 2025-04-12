@@ -20,7 +20,6 @@ pub fn append<T: Template>(template: &T) -> Append<Askama<T>> {
 
 #[cfg(test)]
 mod test {
-
     use super::*;
     use std::fs::File;
     use std::io::Write;
