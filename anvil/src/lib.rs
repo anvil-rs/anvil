@@ -62,18 +62,6 @@
 //! }
 //! ```
 //!
-//! ## Available Operations
-//!
-//! Anvil provides these main operations:
-//!
-//! - [`generate`] - Create new files from templates
-//! - [`append`] - Add content to existing files
-//! - [`transform`] - Transform the content of existing files
-//! - [`mover`] - Move/rename files
-//! - [`either`] - Fallback mechanism for operations
-//!
-//! These operations can be composed to create complex scaffolding workflows.
-//!
 //! ## Inspiration and Credits
 //!
 //! - [Laravel Artisan](https://laravel.com/docs/11.x/artisan)
@@ -357,96 +345,6 @@ pub trait Forge {
     /// * `Result<(), Self::Error>` - Ok if the operation was successful, Err otherwise.
     fn forge(&self, into: impl AsRef<Path>) -> Result<(), Self::Error>;
 }
-
-// A scaffold is a collection of generation steps.
-// for a large scaffold type, we generally want these to be defined by the user (or the template)
-// and then we can just run them in order.
-// We need to define a construct that runs something in order?
-// I guess a function works to some extent.
-
-// TODO: Implement other types like in the other branch. Make type with const reference to template
-// for dynamic templating like tera or minijinja.
-//
-// Implementation for tera:
-// Have a const reference to templates such that we can use templates
-// between crates.
-// Then reference the template statically inside the rendering function.
-//
-//
-// A different approach:
-//  - File operations are a trait. These are defined as append, replace, inject, generate etc.
-//  - File operations are composed into scaffolds.
-//  - Scaffolds are run in order.
-//  - Scaffolds are defined in a file.
-//  - Scaffolds are defined in a file and then run in order.
-// pub trait Forge {
-//     type Error: Error;
-//     fn forge(&self, ) -> Result<(), Self::Error>;
-//     fn describe(&self) -> String;
-// }
-//
-// Forge is defined for the scaffolds themselves.
-//
-// Forge implemented for Append, Generate, Transform etc.
-// Anvil implemented for askama, tera etc.
-//
-// We implement forge for any type that generates anvil.
-//
-// Anvil is defined for the file operations. And templates
-//
-//
-// // Create a new file
-// pub struct Add<T: Template> {
-//     path: PathBuf,
-//     template: T,
-// }
-//
-// // Append utility which is just an extension of add, but adding using append mode.
-// pub struct Append {
-//     path: PathBuf,
-//     template: T
-// }
-//
-// // Delete a file
-// pub struct Remove {
-//     path: PathBuf,
-// }
-//
-// // Rename/move a file
-// pub struct Move {
-//     from: PathBuf,
-//     to: PathBuf,
-// }
-//
-// // General-purpose transformer for file content
-// pub struct Transform {
-//     path: PathBuf,
-//     transformer: Box<dyn Fn(String) -> Result<String, Error>>,
-// }
-//
-//
-//
-// // Util
-// pub struct Either {}
-
-//     fn forge() -> esult<(), String> {
-//         MY_TEMPLATES.render
-//     }
-// }
-
-// Anvil has fn anvil
-// Forge has fn forge
-//
-// A forge needs an anvil to do it's work.
-//
-// Generate, Append, Transform are all Forgeable types.
-//
-// They require an anvil (a template for us to forge our directory)
-//
-// An askama template is an anvil type because we are able to implement
-//
-//
-// // "Any good anvil should be used to forge"
 
 #[cfg(test)]
 mod tests {

@@ -44,12 +44,10 @@ macro_rules! make_liquid_template {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{Aqua, Water};
     use anvil::Anvil;
     use liquid::ParserBuilder;
     use serde::Serialize;
-    use std::{fs::File, sync::LazyLock};
-    use tempfile::tempdir;
+    use std::sync::LazyLock;
 
     static PARSER: LazyLock<liquid::Parser> =
         LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());
