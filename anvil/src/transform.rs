@@ -218,7 +218,7 @@ mod tests {
 
         match result {
             Err(TransformError::Transform(err)) => assert_eq!(err.to_string(), "transform failed"),
-            other => panic!("Expected Transform error but got: {:?}", other),
+            other => unreachable!("Expected Transform error but got: {:?}", other),
         }
     }
 
@@ -237,7 +237,7 @@ mod tests {
         assert!(result.is_err());
         match result {
             Err(TransformError::StdIo(err)) => assert_eq!(err.kind(), std::io::ErrorKind::NotFound),
-            other => panic!("Expected StdIo error but got: {:?}", other),
+            other => unreachable!("Expected StdIo error but got: {:?}", other),
         }
     }
 
