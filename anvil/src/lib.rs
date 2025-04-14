@@ -243,6 +243,9 @@ pub mod mover;
 /// ```
 pub mod transform;
 
+// TODO: Document
+pub mod extensions;
+
 use std::{error::Error, path::Path};
 
 /// The core trait for template rendering engines.

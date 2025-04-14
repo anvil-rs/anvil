@@ -85,28 +85,29 @@ dependencies = [
 
 [[package]]
 name = "anvil"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d611a5acbc87f8cadf27148aa2dc235ceba4e8e000c8ee04e83d3a98053ba1d2"
+version = "0.3.1"
 dependencies = [
+ "diffy",
+ "tempfile",
  "thiserror 2.0.9",
 ]
 
 [[package]]
 name = "anvil"
 version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bbab0dee716246fe1168ba6358d5314a26faead299fc1e428eb215d0e701438"
 dependencies = [
- "tempfile",
  "thiserror 2.0.9",
 ]
 
 [[package]]
 name = "anvil-askama"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1a3cc262c3bcf6b4617d4484e64d15326ce19c385319575752d525245cd728d"
+checksum = "d2f1a4b40d32fed242e2d0e568d7c62427c868510a7bcf91470fe8a565b401b0"
 dependencies = [
- "anvil 0.3.0",
+ "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "askama",
  "heck",
  "thiserror 2.0.9",
@@ -114,22 +115,22 @@ dependencies = [
 
 [[package]]
 name = "anvil-liquid"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a0956c3a2a2b119163453fb26e6100e70f45179597a2046308cceffb5d8cd19"
+checksum = "4785d94fff642bc5c31ada9daa844cade5a5cf7c80653a7e3d75a7ca36503de8"
 dependencies = [
- "anvil 0.3.0",
+ "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "liquid",
  "serde",
 ]
 
 [[package]]
 name = "anvil-minijinja"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c49705edfe84192146b143cb8528c401b0c12cd2772e4fba76b65026d5044b05"
+checksum = "44c3ee5db9eef02714e62633117026446b5c2845d521b02559bbff320a038d66"
 dependencies = [
- "anvil 0.3.0",
+ "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "minijinja",
  "minijinja-embed",
  "serde",
@@ -137,11 +138,11 @@ dependencies = [
 
 [[package]]
 name = "anvil-tera"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c671d3bb52b0eec54749c4d045013facabff9719886f3b8890b13ce3cfdbdaa6"
+checksum = "7229ca984a2577ed3d2d5531023821748a76e85006c263d53e3b7a87af0e3def"
 dependencies = [
- "anvil 0.3.0",
+ "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "tera",
 ]
@@ -445,6 +446,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "diffy"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b545b8c50194bdd008283985ab0b31dba153cfd5b3066a92770634fbc0d7d291"
+dependencies = [
+ "nu-ansi-term",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -474,7 +484,7 @@ dependencies = [
 name = "examples"
 version = "0.0.0"
 dependencies = [
- "anvil 0.3.0",
+ "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anvil-askama",
  "anvil-liquid",
  "anvil-minijinja",
@@ -764,6 +774,15 @@ name = "minijinja-embed"
 version = "2.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9afe707213910fda251ba541a34dd5592bec3432a5beb987a32e9ccb8eb6d6ae"
+
+[[package]]
+name = "nu-ansi-term"
+version = "0.50.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4a28e057d01f97e61255210fcff094d74ed0466038633e95017f5beb68e4399"
+dependencies = [
+ "windows-sys 0.52.0",
+]
 
 [[package]]
 name = "num-conv"
