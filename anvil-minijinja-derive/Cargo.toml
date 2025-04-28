@@ -20,6 +20,7 @@ anvil-minijinja = { path = "../anvil-minijinja" }
 serde = { version = "1.0", features = ["derive"] }
 minijinja = "2.8.0"
 minijinja-embed = "2.8.0"
+trybuild = "1.0.104"
 
 [build-dependencies]
 minijinja-embed = "2.8.0"

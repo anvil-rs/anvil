@@ -171,6 +171,7 @@ dependencies = [
  "quote",
  "serde",
  "syn",
+ "trybuild",
 ]
 
 [[package]]
@@ -467,6 +468,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
+name = "equivalent"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
+
+[[package]]
 name = "errno"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -540,6 +547,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "glob"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8d1add55171497b4705a648c6b583acafb01d58050a51727785f0b2c8e0a2b2"
+
+[[package]]
 name = "globset"
 version = "0.4.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -562,6 +575,12 @@ dependencies = [
  "ignore",
  "walkdir",
 ]
+
+[[package]]
+name = "hashbrown"
+version = "0.15.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
 
 [[package]]
 name = "heck"
@@ -616,6 +635,16 @@ dependencies = [
  "same-file",
  "walkdir",
  "winapi-util",
+]
+
+[[package]]
+name = "indexmap"
+version = "2.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cea70ddb795996207ad57735b50c5982d8844f38ba9ee5f1aedcfb708a2aa11e"
+dependencies = [
+ "equivalent",
+ "hashbrown",
 ]
 
 [[package]]
@@ -1054,6 +1083,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_spanned"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87607cb1398ed59d48732e575a4c28a7a8ebf2454b964fe3f224f2afc07909e1"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "sha2"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1110,6 +1148,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "target-triple"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1ac9aa371f599d22256307c24a9d748c041e548cbf599f35d890f9d365361790"
+
+[[package]]
 name = "tempfile"
 version = "3.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1142,6 +1186,15 @@ dependencies = [
  "serde_json",
  "slug",
  "unic-segment",
+]
+
+[[package]]
+name = "termcolor"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
+dependencies = [
+ "winapi-util",
 ]
 
 [[package]]
@@ -1193,6 +1246,62 @@ checksum = "3526739392ec93fd8b359c8e98514cb3e8e021beb4e5f597b00a0221f8ed8a49"
 dependencies = [
  "num-conv",
  "time-core",
+]
+
+[[package]]
+name = "toml"
+version = "0.8.21"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "900f6c86a685850b1bc9f6223b20125115ee3f31e01207d81655bbcc0aea9231"
+dependencies = [
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_edit",
+]
+
+[[package]]
+name = "toml_datetime"
+version = "0.6.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3da5db5a963e24bc68be8b17b6fa82814bb22ee8660f192bb182771d498f09a3"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.22.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "10558ed0bd2a1562e630926a2d1f0b98c827da99fabd3fe20920a59642504485"
+dependencies = [
+ "indexmap",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_write",
+ "winnow",
+]
+
+[[package]]
+name = "toml_write"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28391a4201ba7eb1984cfeb6862c0b3ea2cfe23332298967c749dddc0d6cd976"
+
+[[package]]
+name = "trybuild"
+version = "1.0.104"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ae08be68c056db96f0e6c6dd820727cca756ced9e1f4cc7fdd20e2a55e23898"
+dependencies = [
+ "glob",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "target-triple",
+ "termcolor",
+ "toml",
 ]
 
 [[package]]
