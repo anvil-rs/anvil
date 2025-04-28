@@ -1,0 +1,5 @@
+error: Expected template attribute to be in the form #[template("template_name.ext")]
+ --> tests/compile_fail/incorrect_format.rs
+  |
+  | #[template(123)]  // Using a number instead of a string literal
+  | ^^^^^^^^^^^^^^^^
