@@ -161,6 +161,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "anvil-minijinja-derive"
+version = "0.1.0"
+dependencies = [
+ "anvil-minijinja 0.1.1",
+ "minijinja",
+ "minijinja-embed",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn",
+]
+
+[[package]]
 name = "anvil-tera"
 version = "0.1.1"
 dependencies = [
