@@ -60,7 +60,7 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     // Generate the implementation
     let expanded = quote! {
         impl ::anvil_minijinja::Shrine for #name {
-            fn minijinja(&self, writer: &mut dyn ::std::io::Write) -> Result<(), ::minijinja::Error> {
+            fn minijinja(&self, writer: &mut dyn ::std::io::Write) -> ::std::result::Result<(), ::minijinja::Error> {
                 let mut env = ::minijinja::Environment::new();
                 ::minijinja_embed::load_templates!(&mut env);
                 let tmpl = env.get_template(#template_name)?;
