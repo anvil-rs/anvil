@@ -4,6 +4,7 @@
 use std::path::PathBuf;
 
 #[test]
+#[cfg_attr(miri, ignore)]
 fn compile_tests() {
     let t = trybuild::TestCases::new();
 
