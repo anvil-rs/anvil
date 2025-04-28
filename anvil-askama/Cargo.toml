@@ -1,0 +1,18 @@
+[package]
+name = "anvil-askama"
+version = "0.1.1"
+edition = "2021"
+homepage="https://github.com/anvil-rs/anvil"
+description="Anvil wrapper for the askama templating library"
+license="MIT"
+readme="../README.md"
+repository="https://github.com/anvil-rs/anvil"
+
+[dependencies]
+anvil = "0.3.0"
+askama = "0.13.0"
+heck = "0.5.0"
+thiserror = "2.0.9"
+
+[dev-dependencies]
+tempfile = "3.15.0"
