@@ -1,4 +1,3 @@
-
 use anvil_minijinja::Shrine;
 use anvil_minijinja_derive::Template;
 use serde::Serialize;
@@ -17,12 +16,17 @@ fn test_template_derive() {
     let template = TestTemplate {
         name: String::from("John"),
     };
-    
+
     // Render the template to a buffer
     let mut buffer = Vec::new();
-    template.minijinja(&mut buffer).expect("Failed to render template");
-    
+    template
+        .minijinja(&mut buffer)
+        .expect("Failed to render template");
+
     // Verify the output
     let output = String::from_utf8(buffer).expect("Output was not valid UTF-8");
-    assert!(output.contains("Hello, John!"), "Template output doesn't match expected content");
+    assert!(
+        output.contains("Hello, John!"),
+        "Template output doesn't match expected content"
+    );
 }

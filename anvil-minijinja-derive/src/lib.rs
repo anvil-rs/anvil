@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, DeriveInput, Error, Lit, Expr, ExprLit};
+use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit};
 
 /// A derive macro for implementing the `Shrine` trait from the `anvil-minijinja` crate.
 ///
@@ -28,12 +28,12 @@ use syn::{parse_macro_input, DeriveInput, Error, Lit, Expr, ExprLit};
 /// use anvil_minijinja::Shrine;
 /// use std::io::Write;
 /// use minijinja;
-/// 
+///
 /// #[derive(Serialize)]
 /// struct MyTemplate {
 ///     name: String,
 /// }
-/// 
+///
 /// impl Shrine for MyTemplate {
 ///     fn minijinja(&self, writer: &mut dyn Write) -> Result<(), minijinja::Error> {
 ///         let mut env = minijinja::Environment::new();
@@ -78,8 +78,12 @@ fn extract_template_name(input: &DeriveInput) -> Result<String, Error> {
     for attr in &input.attrs {
         if attr.path().is_ident("template") {
             let expr = attr.parse_args::<Expr>()?;
-            
-            if let Expr::Lit(ExprLit { lit: Lit::Str(lit_str), .. }) = expr {
+
+            if let Expr::Lit(ExprLit {
+                lit: Lit::Str(lit_str),
+                ..
+            }) = expr
+            {
                 return Ok(lit_str.value());
             } else {
                 let err_msg = "Expected template attribute to be in the form #[template(\"template_name.ext\")]";
@@ -87,7 +91,7 @@ fn extract_template_name(input: &DeriveInput) -> Result<String, Error> {
             }
         }
     }
-    
+
     Err(Error::new_spanned(
         input,
         "Missing #[template(\"template_name.ext\")] attribute",
