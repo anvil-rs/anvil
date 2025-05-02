@@ -21,10 +21,9 @@ mod tests {
     }
 }
 
-// When compile-tests feature is not enabled, provide a dummy test
+// A simple placeholder test
 #[test]
 fn dummy_test() {
     // This test always passes
-    // The real compile failure tests require the compile-tests feature to be enabled
-    println!("Skipping compile failure tests (enable with --features compile-tests)");
+    println!("Placeholder test for trybuild tests");
 }
