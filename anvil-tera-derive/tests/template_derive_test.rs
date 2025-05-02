@@ -2,7 +2,7 @@ use anvil_tera::Earth;
 use anvil_tera_derive::Template;
 use serde::Serialize;
 use std::sync::LazyLock;
-use tera::{Tera, Value, to_value, Result as TeraResult};
+use tera::{to_value, Result as TeraResult, Tera, Value};
 
 // Custom filter function for uppercase
 fn uppercase(value: &Value, _: &std::collections::HashMap<String, Value>) -> TeraResult<Value> {
@@ -16,16 +16,23 @@ static TEMPLATES: LazyLock<Tera> = LazyLock::new(|| {
     // Get the template file path
     let manifest_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let template_path = manifest_dir.join("tests/templates");
-    
+
     // Add the test templates
-    tera.add_template_file(template_path.join("test.txt"), Some("test.txt")).unwrap();
-    tera.add_template_file(template_path.join("conditional.txt"), Some("conditional.txt")).unwrap();
-    tera.add_template_file(template_path.join("override.txt"), Some("override.txt")).unwrap();
-    tera.add_template_file(template_path.join("filter.txt"), Some("filter.txt")).unwrap();
-    
+    tera.add_template_file(template_path.join("test.txt"), Some("test.txt"))
+        .unwrap();
+    tera.add_template_file(
+        template_path.join("conditional.txt"),
+        Some("conditional.txt"),
+    )
+    .unwrap();
+    tera.add_template_file(template_path.join("override.txt"), Some("override.txt"))
+        .unwrap();
+    tera.add_template_file(template_path.join("filter.txt"), Some("filter.txt"))
+        .unwrap();
+
     // Register the uppercase filter
     tera.register_filter("uppercase", uppercase);
-    
+
     tera
 });
 
@@ -163,13 +170,13 @@ impl ManualOverrideTemplate {
         let mut context = tera::Context::new();
         context.insert("override_greeting", &true);
         context.insert("custom_greeting", greeting);
-        
+
         Self {
             name: name.to_string(),
             additional_context: Some(context),
         }
     }
-    
+
     fn without_override(name: &str) -> Self {
         Self {
             name: name.to_string(),
@@ -183,14 +190,14 @@ impl Earth for ManualOverrideTemplate {
     fn tera(&self, writer: &mut (impl std::io::Write + ?Sized)) -> tera::Result<()> {
         let mut context = tera::Context::from_serialize(self)
             .map_err(|e| tera::Error::msg(format!("Failed to serialize context: {}", e)))?;
-            
+
         // Add additional context if provided
         if let Some(ref additional) = self.additional_context {
             for (key, value) in additional.clone().into_json().as_object().unwrap() {
                 context.insert(key, value);
             }
         }
-        
+
         TEMPLATES.render_to("override.txt", &context, writer)
     }
 }

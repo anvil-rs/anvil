@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{DeriveInput, Error, Expr, ExprLit, Lit, Meta, parse_macro_input};
+use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 
 /// Derives the `anvil_tera::Earth` trait for a struct.
 ///
