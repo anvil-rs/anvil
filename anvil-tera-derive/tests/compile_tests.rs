@@ -1,7 +1,6 @@
 // This file runs the compile-fail tests using trybuild
 // It verifies that our derive macro properly handles error cases
 
-#[cfg(feature = "compile-tests")]
 mod tests {
     use std::path::PathBuf;
 
@@ -23,7 +22,6 @@ mod tests {
 }
 
 // When compile-tests feature is not enabled, provide a dummy test
-#[cfg(not(feature = "compile-tests"))]
 #[test]
 fn dummy_test() {
     // This test always passes
