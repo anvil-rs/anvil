@@ -11,7 +11,7 @@ use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 /// - `#[template(path = "template_name.html", tera = MY_TERA_INSTANCE)]`
 ///   - `path`: (Required) The string literal name of the Tera template file.
 ///   - `tera`: (Required) The path identifier of the `tera::Tera` instance to use for rendering.
-///             This instance should typically be a static or lazy_static variable.
+///       - This instance should typically be a static or lazy_static variable.
 ///
 /// # Example
 ///
