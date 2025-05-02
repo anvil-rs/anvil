@@ -1,0 +1,7 @@
+error: Missing #[template("template_name.ext")] attribute
+ --> tests/compile_fail/missing_attribute.rs
+  |
+  | / struct MissingAttributeTemplate {
+  | |     value: String,
+  | | }
+  | |_^

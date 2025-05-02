@@ -5,6 +5,7 @@ members = [
   "anvil-askama", 
   "anvil-liquid", 
   "anvil-minijinja", 
+  "anvil-minijinja-derive", 
   "anvil-tera", 
   "examples"
 ]
