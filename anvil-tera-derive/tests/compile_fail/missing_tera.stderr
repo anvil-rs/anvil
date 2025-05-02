@@ -1,0 +1,5 @@
+error: Missing 'tera' attribute within #[template(...)]. Example: #[template(..., tera = MY_TERA_INSTANCE)]
+  --> $DIR/missing_tera.rs:8:1
+   |
+8  | #[derive(Serialize, Template)]
+   | ^

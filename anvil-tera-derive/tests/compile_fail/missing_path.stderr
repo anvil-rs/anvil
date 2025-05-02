@@ -1,0 +1,5 @@
+error: Missing 'path' attribute within #[template(...)]. Example: #[template(path = "my_template.html", ...)]
+  --> $DIR/missing_path.rs:11:1
+   |
+11 | #[derive(Serialize, Template)]
+   | ^
