@@ -1,0 +1,8 @@
+error: Missing 'tera' attribute within #[template(...)]. Example: #[template(..., tera = MY_TERA_INSTANCE)]
+ --> tests/compile_fail/missing_tera.rs
+  |
+  | / #[template(path = "test.txt")]  // Missing tera attribute
+  | | struct MissingTeraTemplate {
+  | |     value: String,
+  | | }
+  | |_^

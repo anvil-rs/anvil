@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         # Get early warning of new lints which are regularly introduced in beta channels.
-        crate: [anvil, anvil-askama, anvil-liquid, anvil-minijinja, anvil-tera, anvil-minijinja-derive]
+        crate: [anvil, anvil-askama, anvil-liquid, anvil-minijinja, anvil-tera, anvil-minijinja-derive, anvil-tera-derive]
     steps:
       - uses: actions/checkout@v4
         with:

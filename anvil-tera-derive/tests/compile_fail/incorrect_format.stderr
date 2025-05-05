@@ -1,0 +1,5 @@
+error: Expected #[template(...)] attribute list format, e.g., #[template(path = "...")]
+ --> tests/compile_fail/incorrect_format.rs
+  |
+  | #[template = "test.txt"]  // Using incorrect format
+  | ^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,8 @@
+error: Missing 'path' attribute within #[template(...)]. Example: #[template(path = "my_template.html", ...)]
+ --> tests/compile_fail/missing_path.rs
+  |
+  | / #[template(tera = TEMPLATES)]  // Missing path attribute
+  | | struct MissingPathTemplate {
+  | |     value: String,
+  | | }
+  | |_^
