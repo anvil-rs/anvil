@@ -63,8 +63,6 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     let expanded = quote! {
         impl ::anvil_tera::Earth for #name {
             fn tera(&self, writer: &mut (impl ::std::io::Write + ?Sized)) -> ::tera::Result<()> {
-                // Use ::tera::Context to avoid potential namespace conflicts
-                // Handle potential error from serialization
                 let context = ::tera::Context::from_serialize(self)?;
                 // Use the extracted tera instance expression
                 #tera_instance.render_to(#template_name, &context, writer)
