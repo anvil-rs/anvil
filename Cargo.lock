@@ -138,6 +138,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "anvil-liquid-derive"
+version = "0.1.0"
+dependencies = [
+ "anvil-liquid 0.2.1",
+ "liquid",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn",
+ "trybuild",
+]
+
+[[package]]
 name = "anvil-minijinja"
 version = "0.1.1"
 dependencies = [

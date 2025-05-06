@@ -4,8 +4,10 @@ members = [
   "anvil", 
   "anvil-askama", 
   "anvil-liquid", 
+  "anvil-liquid-derive", 
   "anvil-minijinja", 
   "anvil-minijinja-derive", 
-  "anvil-tera", "anvil-tera-derive", 
+  "anvil-tera", 
+  "anvil-tera-derive", 
   "examples"
 ]
