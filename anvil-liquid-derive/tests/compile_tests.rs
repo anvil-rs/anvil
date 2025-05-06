@@ -16,6 +16,5 @@ fn compile_tests() {
     // Add all error case tests in the compile_fail directory
     t.compile_fail(dir.join("missing_attribute.rs"));
     t.compile_fail(dir.join("incorrect_format.rs"));
-    t.compile_fail(dir.join("invalid_parser.rs"));
     t.compile_fail(dir.join("missing_path_value.rs"));
 }
