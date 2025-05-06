@@ -1,0 +1,11 @@
+error: Missing #[template(...)] attribute. Expected one of these formats:
+       1. #[template("path/to/template")]
+       2. #[template("path/to/template", parser = PARSER)]
+       3. #[template(path = "path/to/template")]
+       4. #[template(path = "path/to/template", parser = PARSER)]
+  --> tests/compile_fail/missing_attribute.rs
+   |
+   | / struct MissingAttributeTemplate {
+   | |     value: String,
+   | | }
+   | |_^

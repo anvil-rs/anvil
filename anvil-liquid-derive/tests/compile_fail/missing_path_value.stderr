@@ -1,0 +1,5 @@
+error: expected `=`
+ --> tests/compile_fail/missing_path_value.rs
+  |
+  | #[template(path)]  // Missing path value
+  |                ^

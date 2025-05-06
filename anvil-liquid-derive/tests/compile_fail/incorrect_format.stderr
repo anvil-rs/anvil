@@ -1,0 +1,5 @@
+error: unexpected literal in nested attribute, expected ident
+ --> tests/compile_fail/incorrect_format.rs
+  |
+  | #[template(123)]  // Using a number instead of a string literal
+  |            ^^^
