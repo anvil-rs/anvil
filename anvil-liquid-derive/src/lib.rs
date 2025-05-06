@@ -2,6 +2,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 
+// TODO: Move to CARGO_MANIFEST_DIR for the include str paths.
+
 /// Derives the `anvil_liquid::Water` trait for a struct.
 ///
 /// Requires the struct to also derive `serde::Serialize`.
