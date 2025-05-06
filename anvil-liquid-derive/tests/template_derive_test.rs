@@ -9,21 +9,21 @@ static PARSER: LazyLock<liquid::Parser> =
 
 // Test with simple string literal format
 #[derive(Serialize, Template)]
-#[template("templates/test.txt")]
+#[template("tests/templates/test.txt")]
 struct SimpleTemplate {
     name: String,
 }
 
 // Test with key-value format without parser
 #[derive(Serialize, Template)]
-#[template(path = "templates/test.txt")]
+#[template(path = "tests/templates/test.txt")]
 struct KeyValueTemplate {
     name: String,
 }
 
 // Test with key-value format with custom parser
 #[derive(Serialize, Template)]
-#[template(path = "templates/test.txt", parser = PARSER)]
+#[template(path = "tests/templates/test.txt", parser = PARSER)]
 struct CustomParserTemplate {
     name: String,
 }

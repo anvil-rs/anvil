@@ -2,7 +2,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 
-// TODO: Move to CARGO_MANIFEST_DIR for the include str paths.
+// Import all required
 
 /// Derives the `anvil_liquid::Water` trait for a struct.
 ///
@@ -16,6 +16,9 @@ use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 /// 2. `#[template(path = "path/to/template")]` - Uses the default parser.
 /// 3. `#[template(path = "path/to/template", parser = PARSER)]` - Uses the specified parser.
 ///
+/// Template paths are relative to the `CARGO_MANIFEST_DIR`, which is the directory containing
+/// the `Cargo.toml` file of your project.
+///
 /// # Examples
 ///
 /// ```rust,ignore
@@ -25,14 +28,14 @@ use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 ///
 /// // Example 1: Using the default parser
 /// #[derive(Serialize, Template)]
-/// #[template("greeting.liquid")]
+/// #[template("templates/greeting.liquid")]
 /// struct Greeting {
 ///     name: String,
 /// }
 ///
 /// // Example 2: Using the default parser with key-value syntax
 /// #[derive(Serialize, Template)]
-/// #[template(path = "greeting.liquid")]
+/// #[template(path = "templates/greeting.liquid")]
 /// struct AnotherGreeting {
 ///     name: String,
 /// }
@@ -45,7 +48,7 @@ use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 ///     LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());
 ///
 /// #[derive(Serialize, Template)]
-/// #[template(path = "greeting.liquid", parser = PARSER)]
+/// #[template(path = "templates/greeting.liquid", parser = PARSER)]
 /// struct CustomGreeting {
 ///     name: String,
 /// }
@@ -71,12 +74,12 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     let template_init = if let Some(parser) = parser {
         quote! {
             static #template_ident: ::std::sync::LazyLock<::liquid::Template> =
-                ::std::sync::LazyLock::new(|| #parser.parse(include_str!(#template_path)).unwrap());
+                ::std::sync::LazyLock::new(|| #parser.parse(include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/", #template_path))).unwrap());
         }
     } else {
         quote! {
             static #template_ident: ::std::sync::LazyLock<::liquid::Template> =
-                ::std::sync::LazyLock::new(|| ::liquid::ParserBuilder::with_stdlib().build().unwrap().parse(include_str!(#template_path)).unwrap());
+                ::std::sync::LazyLock::new(|| ::liquid::ParserBuilder::with_stdlib().build().unwrap().parse(include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/", #template_path))).unwrap());
         }
     };
 
@@ -183,7 +186,9 @@ fn extract_template_attributes(input: &DeriveInput) -> Result<(String, Option<Ex
                  1. #[template(\"path/to/template\")]\n\
                  2. #[template(\"path/to/template\", parser = PARSER)]\n\
                  3. #[template(path = \"path/to/template\")]\n\
-                 4. #[template(path = \"path/to/template\", parser = PARSER)]",
+                 4. #[template(path = \"path/to/template\", parser = PARSER)]\n\
+                 \n\
+                 Note: Template paths are relative to CARGO_MANIFEST_DIR",
             ));
         }
     }
@@ -194,6 +199,8 @@ fn extract_template_attributes(input: &DeriveInput) -> Result<(String, Option<Ex
          1. #[template(\"path/to/template\")]\n\
          2. #[template(\"path/to/template\", parser = PARSER)]\n\
          3. #[template(path = \"path/to/template\")]\n\
-         4. #[template(path = \"path/to/template\", parser = PARSER)]",
+         4. #[template(path = \"path/to/template\", parser = PARSER)]\n\
+         \n\
+         Note: Template paths are relative to CARGO_MANIFEST_DIR",
     ))
 }

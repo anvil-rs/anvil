@@ -3,6 +3,8 @@ error: Missing #[template(...)] attribute. Expected one of these formats:
        2. #[template("path/to/template", parser = PARSER)]
        3. #[template(path = "path/to/template")]
        4. #[template(path = "path/to/template", parser = PARSER)]
+
+       Note: Template paths are relative to CARGO_MANIFEST_DIR
   --> tests/compile_fail/missing_attribute.rs
    |
    | / struct MissingAttributeTemplate {
