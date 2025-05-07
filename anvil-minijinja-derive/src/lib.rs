@@ -57,6 +57,9 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
         Err(err) => return err.to_compile_error().into(),
     };
 
+    // TODO: Ability to add custom template loader fn / macro.
+    // which would allow for custom overriding for dev / runtime
+
     // Generate the implementation
     let expanded = quote! {
         impl ::anvil_minijinja::Shrine for #name {

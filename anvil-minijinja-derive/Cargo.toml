@@ -3,7 +3,7 @@ name = "anvil-minijinja-derive"
 version = "0.1.0"
 edition = "2021"
 homepage = "https://github.com/anvil-rs/anvil"
-description = "Derive macro for anvil-minijinja"
+description = "Anvil derive macro wrapper for the minijinja templating library"
 license = "MIT"
 repository = "https://github.com/anvil-rs/anvil"
 
