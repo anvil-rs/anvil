@@ -69,9 +69,8 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     let template_name = format!("_LIQUID_TEMPLATE_{}", name).to_uppercase();
     let template_ident = syn::Ident::new(&template_name, name.span());
 
-    let template_path = [env!("CARGO_MANIFEST_DIR"), &template_path]
-        .iter()
-        .collect::<PathBuf>()
+    let template_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join(&template_path)
         .to_string_lossy()
         .into_owned();
 
