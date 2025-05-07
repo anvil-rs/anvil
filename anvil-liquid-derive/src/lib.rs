@@ -72,9 +72,8 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     let template_path = [env!("CARGO_MANIFEST_DIR"), &template_path]
         .iter()
         .collect::<PathBuf>()
-        .into_os_string()
-        .into_string()
-        .unwrap();
+        .to_string_lossy()
+        .into_owned();
 
     // Generate the static template initialization
     let template_init = if let Some(parser) = parser {
