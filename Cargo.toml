@@ -2,12 +2,12 @@
 resolver = "2"
 members = [
   "anvil", 
-  "anvil-askama", 
-  "anvil-liquid", 
-  "anvil-liquid-derive", 
-  "anvil-minijinja", 
-  "anvil-minijinja-derive", 
-  "anvil-tera", 
-  "anvil-tera-derive", 
+  "backends/askama/anvil-askama", 
+  "backends/liquid/anvil-liquid", 
+  "backends/liquid/anvil-liquid-derive", 
+  "backends/minijinja/anvil-minijinja", 
+  "backends/minijinja/anvil-minijinja-derive", 
+  "backends/tera/anvil-tera", 
+  "backends/tera/anvil-tera-derive", 
   "examples"
 ]
