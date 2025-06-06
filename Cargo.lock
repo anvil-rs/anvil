@@ -121,6 +121,7 @@ name = "anvil-liquid"
 version = "0.2.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil-liquid-derive",
  "liquid",
  "serde",
  "tempfile",
@@ -155,6 +156,7 @@ name = "anvil-minijinja"
 version = "0.1.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil-minijinja-derive",
  "minijinja",
  "minijinja-embed",
  "serde",
@@ -192,6 +194,7 @@ name = "anvil-tera"
 version = "0.1.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "anvil-tera-derive",
  "pest",
  "serde",
  "slug",
@@ -516,8 +519,11 @@ dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anvil-askama 0.2.2",
  "anvil-liquid 0.3.2",
+ "anvil-liquid-derive",
  "anvil-minijinja 0.2.2",
+ "anvil-minijinja-derive",
  "anvil-tera 0.2.2",
+ "anvil-tera-derive",
  "askama",
  "clap",
  "heck",
