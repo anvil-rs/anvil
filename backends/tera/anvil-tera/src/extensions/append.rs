@@ -32,18 +32,20 @@ mod test {
     });
 
     use super::*;
-    use crate::make_tera_template;
     use serde::Serialize;
     use std::{fs::File, io::Write, sync::LazyLock};
     use tempfile::tempdir;
     use tera::Tera;
 
-    // NOTE: This template needs the dummy braces to be recognized by Tera because a completely
-    // empty struct us not parseable json.
     #[derive(Serialize)]
     struct TestTemplate {}
 
-    make_tera_template!(TestTemplate, "test", TEMPLATES);
+    impl Earth for TestTemplate {
+        fn tera(&self, writer: &mut (impl std::io::Write + ?Sized)) -> tera::Result<()> {
+            let context = ::tera::Context::from_serialize(self)?;
+            TEMPLATES.render_to("test", &context, writer)
+        }
+    }
 
     #[test]
     fn it_fails_if_file_does_not_exist() {
@@ -63,27 +65,5 @@ mod test {
         assert!(result.is_ok());
         let content = std::fs::read_to_string(&file_path).unwrap();
         assert_eq!(content, "Initial content.\nAppended content.")
-    }
-
-    #[derive(Serialize)]
-    struct TestFile {
-        name: String,
-    }
-
-    make_tera_template!(TestFile, "test.txt", TEMPLATES);
-
-    #[test]
-    fn it_can_render_from_file() {
-        let dir = tempdir().unwrap();
-        let file_path = dir.path().join("my-temporary-note.txt");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "Initial content.").unwrap();
-        let result = append(&TestFile {
-            name: "World".to_string(),
-        })
-        .forge(&file_path);
-        assert!(result.is_ok());
-        let content = std::fs::read_to_string(&file_path).unwrap();
-        assert_eq!(content.trim(), "Initial content.\nHello, World!");
     }
 }

@@ -26,17 +26,12 @@ mod liquid_templates {
     pub static PARSER: LazyLock<liquid::Parser> =
         LazyLock::new(|| ParserBuilder::with_stdlib().build().unwrap());
 
-    #[derive(Serialize)]
+    #[derive(Serialize, anvil_liquid_derive::Template)]
+    #[template(path = "templates/mixed_templates/service.ts", parser = PARSER)]
     pub struct ServiceTemplate {
         pub name: String,
         pub methods: Vec<String>,
     }
-
-    anvil_liquid::make_liquid_template!(
-        ServiceTemplate,
-        "templates/mixed_templates/service.ts",
-        PARSER
-    );
 }
 
 mod minijinja_templates {
@@ -44,7 +39,8 @@ mod minijinja_templates {
     use serde::Serialize;
     use std::io::Write;
 
-    #[derive(Serialize)]
+    #[derive(Serialize, anvil_minijinja_derive::Template)]
+    #[template("mixed_templates/router.rs")]
     pub struct RouterTemplate {
         pub routes: Vec<Route>,
     }
@@ -55,8 +51,6 @@ mod minijinja_templates {
         pub handler: String,
         pub method: String,
     }
-
-    anvil_minijinja::make_minijinja_template!(RouterTemplate, "mixed_templates/router.rs");
 }
 
 mod tera_templates {
@@ -88,15 +82,14 @@ mod tera_templates {
         tera
     });
 
-    #[derive(Serialize)]
+    #[derive(Serialize, anvil_tera_derive::Template)]
+    #[template(path = "readme.md", tera = TERA)]
     pub struct ReadmeTemplate {
         pub project_name: String,
         pub description: String,
         pub features: Vec<String>,
         pub license: String,
     }
-
-    anvil_tera::make_tera_template!(ReadmeTemplate, "readme.md", TERA);
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

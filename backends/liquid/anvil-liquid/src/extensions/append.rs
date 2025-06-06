@@ -1,6 +1,5 @@
-use anvil::{append::Append, Forge};
-
 use crate::{Aqua, Water};
+use anvil::{append::Append, Forge};
 
 pub trait LiquidAppendExt<'a, T: Water>: Forge {
     fn liquid(template: &'a T) -> Self;
@@ -19,8 +18,6 @@ pub fn append<T: Water>(template: &T) -> Append<Aqua<'_, T>> {
 
 #[cfg(test)]
 mod test {
-    use crate::make_liquid_template;
-
     use super::*;
     use liquid::ParserBuilder;
     use serde::Serialize;
@@ -59,28 +56,5 @@ mod test {
         assert!(result.is_ok());
         let content = std::fs::read_to_string(&file_path).unwrap();
         assert_eq!(content, "Initial content.\nAppended content.")
-    }
-
-    #[derive(Serialize)]
-    struct TestFile {
-        name: String,
-    }
-
-    make_liquid_template!(TestFile, "../../templates/test.txt", PARSER);
-
-    #[test]
-    fn it_can_render_from_file() {
-        let dir = tempdir().unwrap();
-        let file_path = dir.path().join("my-temporary-note.txt");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "Initial content.").unwrap();
-        let result = append(&TestFile {
-            name: "World".to_string(),
-        })
-        .forge(&file_path);
-        assert!(result.is_ok());
-        let content = std::fs::read_to_string(&file_path).unwrap();
-        // trim newline to avoid platform differences
-        assert_eq!(content.trim(), "Initial content.\nHello, World!");
     }
 }

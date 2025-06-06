@@ -26,7 +26,7 @@ mod test {
     use serde::Serialize;
     use tempfile::tempdir;
 
-    use crate::{extensions::append::append, make_minijinja_template};
+    use crate::extensions::append::append;
 
     #[derive(Serialize)]
     struct TestTemplate {}
@@ -59,27 +59,5 @@ mod test {
         assert!(result.is_ok());
         let content = std::fs::read_to_string(&file_path).unwrap();
         assert_eq!(content, "Initial content.\nAppended content.")
-    }
-
-    #[derive(Serialize)]
-    struct TestFile {
-        name: String,
-    }
-
-    make_minijinja_template!(TestFile, "test.txt");
-
-    #[test]
-    fn it_can_render_from_file() {
-        let dir = tempdir().unwrap();
-        let file_path = dir.path().join("my-temporary-note.txt");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "Initial content.").unwrap();
-        let result = append(&TestFile {
-            name: "World".to_string(),
-        })
-        .forge(&file_path);
-        assert!(result.is_ok());
-        let content = std::fs::read_to_string(&file_path).unwrap();
-        assert_eq!(content, "Initial content.\nHello, World!");
     }
 }

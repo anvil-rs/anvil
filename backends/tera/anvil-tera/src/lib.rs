@@ -26,40 +26,6 @@ pub mod prelude {
     pub use crate::Earth;
 }
 
-/// Macro to generate the Earth trait implementation for a struct.
-/// This macro takes in the name of the struct, the name of a template, and a reference to a global, lazy locked tera instance.
-/// It then creates a context from self (because earth implies serialize and therefore we can create context from serialize) and then render_to template, with context.
-/// # Example
-/// ```
-/// use tera::Tera;
-/// use std::sync::LazyLock;
-/// use serde::Serialize;
-/// use anvil::Anvil;
-/// use anvil_tera::{make_tera_template, prelude::*};
-///
-/// static TEMPLATES: LazyLock<Tera> = LazyLock::new(|| {
-///     let mut tera = Tera::default();
-///     tera.add_raw_template("test", "Appended content.").unwrap();
-///     tera
-/// });
-///
-/// #[derive(Serialize)]
-/// struct TestEarth { name: String }
-///
-/// make_tera_template!(TestEarth, "test.html", TEMPLATES);
-/// ```
-#[macro_export]
-macro_rules! make_tera_template {
-    ($struct:ident, $template:expr, $tera:expr) => {
-        impl Earth for $struct {
-            fn tera(&self, writer: &mut (impl std::io::Write + ?Sized)) -> tera::Result<()> {
-                let context = tera::Context::from_serialize(self).unwrap();
-                $tera.render_to($template, &context, writer)
-            }
-        }
-    };
-}
-
 #[cfg(test)]
 mod test {
     use std::sync::LazyLock;
@@ -73,9 +39,7 @@ mod test {
         tera
     });
 
-    use super::prelude::*;
     use super::*;
-    use crate::make_tera_template;
     use serde::Serialize;
     use tera::Tera;
 
@@ -84,8 +48,13 @@ mod test {
         name: String,
     }
 
-    // TODO: Make this a derive macro
-    make_tera_template!(TestEarth, "test", TEMPLATES);
+    impl Earth for TestEarth {
+        fn tera(&self, writer: &mut (impl std::io::Write + ?Sized)) -> tera::Result<()> {
+            let context = ::tera::Context::from_serialize(self)?;
+            // Use the extracted tera instance expression
+            TEMPLATES.render_to("test", &context, writer)
+        }
+    }
 
     #[test]
     fn it_can_render_template() {

@@ -19,8 +19,6 @@ pub fn generate<T: Water>(template: &T) -> Generate<Aqua<'_, T>> {
 
 #[cfg(test)]
 mod test {
-    use crate::make_liquid_template;
-
     use super::*;
     use liquid::ParserBuilder;
     use serde::Serialize;
@@ -61,26 +59,5 @@ mod test {
         assert!(result.is_ok());
         let file_contents = std::fs::read_to_string(&file_path).unwrap();
         assert_eq!(file_contents, "Generated content.");
-    }
-
-    #[derive(Serialize)]
-    struct TestFile {
-        name: String,
-    }
-
-    make_liquid_template!(TestFile, "../../templates/test.txt", PARSER);
-
-    #[test]
-    fn it_can_render_from_file() {
-        let dir = tempdir().unwrap();
-        let file_path = dir.path().join("my-temporary-note.txt");
-        let result = generate(&TestFile {
-            name: "World".to_string(),
-        })
-        .forge(&file_path);
-        assert!(result.is_ok());
-        let file_contents = std::fs::read_to_string(&file_path).unwrap();
-        // trim newlines to fix windows tests
-        assert_eq!(file_contents.trim(), "Hello, World!");
     }
 }
