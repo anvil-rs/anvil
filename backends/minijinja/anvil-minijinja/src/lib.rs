@@ -26,20 +26,7 @@ pub mod prelude {
     pub use crate::Shrine;
 }
 
-#[macro_export]
-macro_rules! make_minijinja_template {
-    ($struct:ident, $template:expr) => {
-        impl Shrine for $struct {
-            fn minijinja(&self, writer: &mut dyn Write) -> Result<(), minijinja::Error> {
-                let mut env = minijinja::Environment::new();
-                minijinja_embed::load_templates!(&mut env);
-                let tmpl = env.get_template($template)?;
-                tmpl.render_to_write(self, writer)?;
-                Ok(())
-            }
-        }
-    };
-}
+
 
 #[cfg(test)]
 mod test {
