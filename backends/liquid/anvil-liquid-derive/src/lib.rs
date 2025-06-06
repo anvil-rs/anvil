@@ -1,6 +1,5 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use std::path::PathBuf;
 use syn::{parse_macro_input, DeriveInput, Error, Expr, ExprLit, Lit, Meta};
 
 /// Derives the `anvil_liquid::Water` trait for a struct.
@@ -69,21 +68,20 @@ pub fn derive_template(input: TokenStream) -> TokenStream {
     let template_name = format!("_LIQUID_TEMPLATE_{}", name).to_uppercase();
     let template_ident = syn::Ident::new(&template_name, name.span());
 
-    let template_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join(&template_path)
-        .to_string_lossy()
-        .into_owned();
+    let include_str_relative_to_manifest_dir = quote! {
+        include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/", #template_path))
+    };
 
     // Generate the static template initialization
     let template_init = if let Some(parser) = parser {
         quote! {
             static #template_ident: ::std::sync::LazyLock<::liquid::Template> =
-                ::std::sync::LazyLock::new(|| #parser.parse(include_str!(#template_path)).unwrap());
+                ::std::sync::LazyLock::new(|| #parser.parse(#include_str_relative_to_manifest_dir).unwrap());
         }
     } else {
         quote! {
             static #template_ident: ::std::sync::LazyLock<::liquid::Template> =
-                ::std::sync::LazyLock::new(|| ::liquid::ParserBuilder::with_stdlib().build().unwrap().parse(include_str!(#template_path)).unwrap());
+                ::std::sync::LazyLock::new(|| ::liquid::ParserBuilder::with_stdlib().build().unwrap().parse(#include_str_relative_to_manifest_dir).unwrap());
         }
     };
 
