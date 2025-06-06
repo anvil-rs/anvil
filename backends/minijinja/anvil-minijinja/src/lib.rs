@@ -26,8 +26,6 @@ pub mod prelude {
     pub use crate::Shrine;
 }
 
-
-
 #[cfg(test)]
 mod test {
     use super::*;
