@@ -9,5 +9,6 @@ members = [
   "backends/minijinja/anvil-minijinja-derive", 
   "backends/tera/anvil-tera", 
   "backends/tera/anvil-tera-derive", 
-  "examples"
+  "examples",
+  "tests"
 ]
