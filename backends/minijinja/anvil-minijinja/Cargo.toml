@@ -1,15 +1,15 @@
 [package]
 name = "anvil-minijinja"
-version = "0.2.1"
+version = "1.0.0"
 edition = "2021"
 homepage="https://github.com/anvil-rs/anvil"
 description="Anvil wrapper for the minijinja liquid templating library"
 license="MIT"
-readme="../README.md"
+readme="../../../README.md"
 repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
-anvil = "0.3.1"
+anvil = "0.3.2"
 minijinja = "2.8.0"
 minijinja-embed = "2.8.0"
 serde = { version = "1.0.219", features = ["derive"] }

@@ -16,6 +16,7 @@ quote = "1.0"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
 
 [dev-dependencies]
+anvil = "0.3.2"
 anvil-minijinja = { path = "../anvil-minijinja" }
 serde = { version = "1.0", features = ["derive"] }
 minijinja = "2.8.0"

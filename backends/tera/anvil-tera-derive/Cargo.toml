@@ -17,7 +17,9 @@ quote = "1.0"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
 
 [dev-dependencies]
+anvil = "0.3.2"
 anvil-tera = { path = "../anvil-tera" }
 serde = { version = "1.0", features = ["derive"] }
 tera = { version = "1.20.0" } 
 trybuild = { version = "1.0.104" }
+tempfile = "3.15.0"
