@@ -28,21 +28,6 @@ pub mod prelude {
     pub use crate::Water;
 }
 
-#[macro_export]
-macro_rules! make_liquid_template {
-    ($struct:ident, $template:expr, $parser:expr) => {
-        static TEMPLATE: std::sync::LazyLock<liquid::Template> =
-            LazyLock::new(|| $parser.parse(include_str!($template)).unwrap());
-
-        impl Water for $struct {
-            fn liquid(&self, writer: &mut dyn std::io::Write) -> Result<(), liquid::Error> {
-                let object = liquid::to_object(self)?;
-                TEMPLATE.render_to(writer, &object)
-            }
-        }
-    };
-}
-
 #[cfg(test)]
 mod test {
     use crate::{Aqua, Water};
