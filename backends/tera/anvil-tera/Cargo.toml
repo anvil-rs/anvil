@@ -1,6 +1,6 @@
 [package]
 name = "anvil-tera"
-version = "0.1.1"
+version = "0.2.1"
 edition = "2021"
 homepage="https://github.com/anvil-rs/anvil"
 description="Anvil wrapper for the tera templating library"
@@ -9,7 +9,7 @@ readme="../README.md"
 repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
-anvil = "0.3.0"
+anvil = "0.3.1"
 serde = { version = "1.0.219", features = ["derive"] }
 tera = { version = "1.20.0" } 
 

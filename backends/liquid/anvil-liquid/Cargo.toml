@@ -1,6 +1,6 @@
 [package]
 name = "anvil-liquid"
-version = "0.2.1"
+version = "0.3.1"
 edition = "2021"
 homepage="https://github.com/anvil-rs/anvil"
 description="Anvil wrapper for the liquid templating library"
@@ -9,7 +9,7 @@ readme="../README.md"
 repository="https://github.com/anvil-rs/anvil"
 
 [dependencies]
-anvil = "0.3.0"
+anvil = "0.3.1"
 liquid = "0.26.11"
 serde = { version = "1.0.219", features = ["derive"] }
 

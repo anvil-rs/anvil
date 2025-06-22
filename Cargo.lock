@@ -118,7 +118,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-liquid"
-version = "0.2.1"
+version = "0.3.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anvil-liquid-derive",
@@ -142,7 +142,7 @@ dependencies = [
 name = "anvil-liquid-derive"
 version = "0.1.0"
 dependencies = [
- "anvil-liquid 0.2.1",
+ "anvil-liquid 0.3.1",
  "liquid",
  "proc-macro2",
  "quote",
@@ -153,7 +153,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-minijinja"
-version = "0.1.1"
+version = "0.2.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anvil-minijinja-derive",
@@ -179,7 +179,7 @@ dependencies = [
 name = "anvil-minijinja-derive"
 version = "0.1.0"
 dependencies = [
- "anvil-minijinja 0.1.1",
+ "anvil-minijinja 0.2.1",
  "minijinja",
  "minijinja-embed",
  "proc-macro2",
@@ -191,7 +191,7 @@ dependencies = [
 
 [[package]]
 name = "anvil-tera"
-version = "0.1.1"
+version = "0.2.1"
 dependencies = [
  "anvil 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anvil-tera-derive",
@@ -217,7 +217,7 @@ dependencies = [
 name = "anvil-tera-derive"
 version = "0.1.1"
 dependencies = [
- "anvil-tera 0.1.1",
+ "anvil-tera 0.2.1",
  "proc-macro2",
  "quote",
  "serde",
