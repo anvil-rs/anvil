@@ -21,23 +21,41 @@ static TEMPLATES: LazyLock<Tera> = LazyLock::new(|| {
 
     // Check if template files exist
     let generate_template_path = template_path.join("generate_test.txt");
-    println!("Generate template exists: {}", generate_template_path.exists());
+    println!(
+        "Generate template exists: {}",
+        generate_template_path.exists()
+    );
     if generate_template_path.exists() {
         let template_content = std::fs::read_to_string(&generate_template_path).unwrap();
         println!("Template content: {:?}", template_content);
     }
 
     // Add the test templates
-    tera.add_template_file(template_path.join("append_test.txt"), Some("append_test.txt"))
-        .unwrap();
-    tera.add_template_file(template_path.join("generate_test.txt"), Some("generate_test.txt"))
-        .unwrap();
-    tera.add_template_file(template_path.join("either_primary.txt"), Some("either_primary.txt"))
-        .unwrap();
-    tera.add_template_file(template_path.join("either_fallback.txt"), Some("either_fallback.txt"))
-        .unwrap();
+    tera.add_template_file(
+        template_path.join("append_test.txt"),
+        Some("append_test.txt"),
+    )
+    .unwrap();
+    tera.add_template_file(
+        template_path.join("generate_test.txt"),
+        Some("generate_test.txt"),
+    )
+    .unwrap();
+    tera.add_template_file(
+        template_path.join("either_primary.txt"),
+        Some("either_primary.txt"),
+    )
+    .unwrap();
+    tera.add_template_file(
+        template_path.join("either_fallback.txt"),
+        Some("either_fallback.txt"),
+    )
+    .unwrap();
 
-    println!("Templates loaded: {:?}", tera.get_template_names().collect::<Vec<_>>());
+    println!(
+        "Templates loaded: {:?}",
+        tera.get_template_names().collect::<Vec<_>>()
+    );
 
     tera
 });
@@ -166,20 +184,23 @@ fn test_generate_creates_new_file() {
     // Test the Earth trait implementation directly
     let mut test_buffer = Vec::new();
     println!("Template data: name={}, id={}", template.name, template.id);
-    
+
     // Test if we can manually render the template
     let context = tera::Context::from_serialize(&template).unwrap();
     println!("Context created: {:?}", context);
-    
+
     let manual_result = TEMPLATES.render_to("generate_test.txt", &context, &mut test_buffer);
     println!("Manual render result: {:?}", manual_result);
     println!("Manual buffer: {:?}", String::from_utf8_lossy(&test_buffer));
-    
+
     // Reset buffer for Earth trait test
     test_buffer.clear();
     let earth_result = template.tera(&mut test_buffer);
     println!("Earth trait result: {:?}", earth_result);
-    println!("Earth trait buffer: {:?}", String::from_utf8_lossy(&test_buffer));
+    println!(
+        "Earth trait buffer: {:?}",
+        String::from_utf8_lossy(&test_buffer)
+    );
 
     let generate_op = generate(&template);
     let result = generate_op.forge(&file_path);
