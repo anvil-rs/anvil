@@ -5,21 +5,20 @@ edition = "2021"
 
 [dependencies]
 anvil = "0.3.2"
-# Liquid backend
+
 anvil-liquid = { path = "../backends/liquid/anvil-liquid" }
 anvil-liquid-derive = { path = "../backends/liquid/anvil-liquid-derive" }
 liquid = "0.26"
-# MiniJinja backend
+
 anvil-minijinja = { path = "../backends/minijinja/anvil-minijinja" }
 anvil-minijinja-derive = { path = "../backends/minijinja/anvil-minijinja-derive" }
 minijinja = "2.0"
 minijinja-embed = "2.8.0"
 
-# Tera backend
 anvil-tera = { path = "../backends/tera/anvil-tera" }
 anvil-tera-derive = { path = "../backends/tera/anvil-tera-derive" }
 tera = "1.0"
-# Common dependencies
+
 serde = { version = "1.0", features = ["derive"] }
 tempfile = "3.0"
 
